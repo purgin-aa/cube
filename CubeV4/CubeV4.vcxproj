@@ -73,6 +73,8 @@
     <LibraryPath>C:\Users\bigand\Documents\Visual Studio 2015\Projects\CubeV4\3dparty\SDL2-2.0.3\lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\Users\bigand\Documents\Visual Studio 2015\Projects\CubeV4\bin64;$(ExecutablePath)</ExecutablePath>
     <OutDir>$(SolutionDir)bin$(PlatformArchitecture)\$(Configuration)\</OutDir>
+    <GenerateManifest>false</GenerateManifest>
+    <IntDir>..\..\temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -124,13 +126,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DRenderBasicTypes.cpp" />
     <ClCompile Include="DRenderContext.cpp" />
     <ClCompile Include="DRenderResourceManager.cpp" />
     <ClCompile Include="DWindowRenderContext.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DDirect3D11.h" />
     <ClInclude Include="DIntrusivePtr.h" />
+    <ClInclude Include="DMaterialController.h" />
     <ClInclude Include="DRenderBasicTypes.h" />
     <ClInclude Include="DRenderContext.h" />
     <ClInclude Include="DRenderResourceManager.h" />

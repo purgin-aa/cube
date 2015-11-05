@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _DWINDOWRENDERCONTEXT_H_
+#define _DWINDOWRENDERCONTEXT_H_
 
 #include "DRenderContext.h"
 
@@ -45,3 +46,5 @@ protected:
 };
 
 DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager, const DWindowContextConfig &config, HRESULT *returnCode );
+
+#endif

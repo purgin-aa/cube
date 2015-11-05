@@ -1,30 +1,87 @@
-#pragma once
-#include <d3d11.h>
-#include <dxgi1_2.h>
+#ifndef _RENDERBASISTYPES_H_
+#define _RENDERBASISTYPES_H_
 
-#include <d3dcompiler.h>
-#include "DIntrusivePtr.h"
+#include "DDirect3D11.h"
 
-typedef DIntrusivePtr<ID3D11Device> DID3D11DevicePtr;
-typedef DIntrusivePtr<ID3D11DeviceContext> DID3D11DeviceContextPtr;
-typedef DIntrusivePtr<ID3D11Debug> DID3D11DebugPtr;
+#include "DSharedObject.h"
+#include "DTools.h"
 
-typedef DIntrusivePtr<ID3D11RenderTargetView> DID3D11RenderTargetViewPtr;
-typedef DIntrusivePtr<ID3D11SamplerState> DID3D11SamplerStatePtr;
+class DRenderResourceManager;
 
-typedef DIntrusivePtr<ID3D11VertexShader> DID3D11VertexShaderPtr;
-typedef DIntrusivePtr<ID3D11PixelShader> DID3D11PixelShaderPtr;
-typedef DIntrusivePtr<ID3D11Buffer> DID3D11BufferPtr;
-typedef DIntrusivePtr<ID3DBlob> DID3DBlobPtr;
-typedef DIntrusivePtr<ID3D11Texture2D> DID3D11Texture2DPtr;
+class DVertexBufferView;
+class DIndexBufferView;
+class DSimpleMesh;
 
-typedef DIntrusivePtr<IDXGISwapChain> DIDXGISwapChainPtr;
-typedef DIntrusivePtr<IDXGISwapChain1> DIDXGISwapChain1Ptr;
+typedef DIntrusivePtr<DVertexBufferView> DVertexBufferViewPtr;
+typedef DIntrusivePtr<DIndexBufferView> DIndexBufferViewPtr;
+typedef DIntrusivePtr<DSimpleMesh> DSimpleMeshPtr;
 
-typedef DIntrusivePtr<IDXGIFactory> DIDXGIFactoryPtr;
-typedef DIntrusivePtr<IDXGIFactory2> DIDXGIFactory2Ptr;
+class DVertexBufferView
+	: public DSharedObject
+{
+public:
+	inline DID3D11BufferPtr GetVertexBuffer( void ) const;
+	inline u32 GetStride( void ) const;
+	inline u32 GetOffset( void ) const;
 
-typedef DIntrusivePtr<IDXGIAdapter2> DIDXGIAdapter2Ptr;
+private:
+	DID3D11BufferPtr m_vertexBuffer;
+	u32 m_stride;
+	u32 m_offset;
 
-typedef DIntrusivePtr<IDXGIDevice2> DIDXGIDevice2Ptr;
+protected:
+	friend DRenderResourceManager;
 
+	explicit DVertexBufferView( DID3D11BufferPtr buffer,
+								u32 stride,
+								u32 offset );
+	
+};
+
+
+class DIndexBufferView
+	: public DSharedObject
+{
+public:
+
+	inline DID3D11BufferPtr GetIndexBuffer( void ) const;
+	inline DXGI_FORMAT GetIndexBufferFormat( void ) const;
+	inline u32 GetIndexBufferOffset( void ) const;
+
+private:
+	DID3D11BufferPtr m_indexBuffer;
+	DXGI_FORMAT m_format;
+	u32 m_offset;
+
+protected:
+	friend DRenderResourceManager;
+
+	explicit DIndexBufferView( DID3D11BufferPtr buffer,
+							   DXGI_FORMAT format,
+							   u32 offset );
+};
+
+
+class DSimpleMesh
+	: DSharedObject
+{
+public:
+	inline DVertexBufferViewPtr GetVertices( void ) const;
+	inline DIndexBufferViewPtr GetIndices( void ) const;
+	inline u32 GetIndexCount( void ) const;
+
+private:
+	DVertexBufferViewPtr m_vertices;
+	DIndexBufferViewPtr m_indices;
+	u32 m_indexCount;
+
+protected:
+	friend DRenderResourceManager;
+
+	explicit DSimpleMesh( DVertexBufferViewPtr vertices,
+						  DIndexBufferViewPtr indices,
+						  u32 indexCount );
+
+};
+
+#endif

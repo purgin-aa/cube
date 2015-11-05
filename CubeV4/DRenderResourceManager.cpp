@@ -108,6 +108,16 @@ DID3DBlobPtr DRenderResourceManager::CreateBlob( u32 blobSize, HRESULT * returnC
 	return blob;
 }
 
+DVertexBufferViewPtr DRenderResourceManager::CreateVertexBufferView( DID3D11BufferPtr vertices, u32 stride, u32 offset )
+{
+	// assert( vertices );
+	// assert( stride );
+
+	DVertexBufferViewPtr view( new DVertexBufferView( vertices, stride, offset ) );
+
+	return view;
+}
+
 DID3D11DevicePtr DRenderResourceManager::GetDevice( void ) const
 {
 	return m_device;

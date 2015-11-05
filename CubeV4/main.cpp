@@ -11,19 +11,8 @@
 
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 {
-	//DConfig config = {
-	//	1024u, // width
-	//	768u, // height
-	//	false, // fullscreen
-	//	3.1415926535f / 4.f, // fov
-	//	0.01f, // nearZ
-	//	100.0f, // farZ
-	//	{ 1, 0 }, // sampler Desc
-	//	NULL
-	//};
-
-	u16 windowWidth = 1024u;
-	u16 windowHeight = 768u;
+	u16 windowWidth = 1600u;
+	u16 windowHeight = 900u;
 
 	SDL_Window *window = nullptr;
 
@@ -54,11 +43,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 	
 	DWindowContextConfig windowContextConfig
 	{
-		info.info.win.window,
-		{ 60u, 1u },
-		windowWidth,
-		windowHeight,
-		true
+		info.info.win.window, // window desc
+		{ 60u, 1u }, // rate 60/1
+		windowWidth, // backbuffer width
+		windowHeight, // backbuffer height
+		false // fullscreen?
 	};
 
 	HRESULT hr = S_OK;

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _DSCOPEGUARD_H_
+#define _DSCOPEGUART_H_
 
 #include <utility>
 
@@ -34,3 +35,5 @@ DScopeGuard<func_t> DMakeScopeGuard( func_t &&func )
 {
 	return DScopeGuard<func_t>( std::forward<func_t>( func ) );
 }
+
+#endif
