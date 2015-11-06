@@ -15,7 +15,7 @@ struct DScopeGuard {
 		other.m_enabled = false;
 	}
 
-	~DScopeGuard() noexcept {
+	~DScopeGuard() {
 		if( m_enabled )
 			m_exit_fn();
 	}
