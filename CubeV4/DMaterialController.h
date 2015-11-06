@@ -4,18 +4,14 @@
 #include "DIntrusivePtr.h"
 #include "DSharedObject.h"
 
-
 class DRenderContextPtr;
 
-class DMaterialController
-	: DSharedObject
-{
+class DMaterialController : DSharedObject {
 public:
-	class DMaterial
-		: public DSharedObject
-	{
+	//
+	class DMaterial : public DSharedObject {
 	public:
-		virtual ~DMaterial(){ }
+		virtual ~DMaterial() {}
 	};
 
 	virtual ~DMaterialController() {};

@@ -12,28 +12,31 @@
 
 using namespace DirectX;
 
-struct DRenderWVMatrices
-{
+
+//
+struct DRenderWVMatrices {
 	XMMATRIX world;
 	XMMATRIX view;
 };
 
-struct DRenderPerspectiveModeDesc
-{
+
+//
+struct DRenderPerspectiveModeDesc {
 	f32 fov;
 	f32 nearZ;
 	f32 farZ;
 };
 
-struct DRenderTargetSize
-{
+
+//
+struct DRenderTargetSize {
 	u16 width;
 	u16 height;
 };
 
-class DRenderContext
-	: public DSharedObject
-{
+
+//
+class DRenderContext : public DSharedObject {
 public:
 	// projection mode
 	//void SetPerspectiveMode( const DRenderPerspectiveModeDesc &perspectiveModeDesc );
@@ -47,14 +50,14 @@ public:
 	void SetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY topology );
 
 	void DrawIndexed( u32 indexCount, u32 startIndexLocation, u32 startVertexLocation );
-	void FillCurrentTargetView( f32 color[ 4 ] );
+	void FillCurrentTargetView( f32 color[4] );
 
 	void SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarget, const DRenderTargetSize &size );
 
 	DID3D11DeviceContextPtr GetDeviceContext( void ) const;
 
 protected:
-
+	//
 	DRenderResourceManagerPtr m_manager;
 
 	DID3D11DeviceContextPtr m_deviceContext;

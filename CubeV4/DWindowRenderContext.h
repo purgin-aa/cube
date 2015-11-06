@@ -3,8 +3,8 @@
 
 #include "DRenderContext.h"
 
-struct DWindowContextConfig
-{
+//
+struct DWindowContextConfig {
 	HWND currentWindow;
 	DXGI_RATIONAL refreshRate;
 	u16 width;
@@ -14,37 +14,43 @@ struct DWindowContextConfig
 	// todo quality
 };
 
-class DWindowRenderContext;
-typedef DIntrusivePtr<DWindowRenderContext> DWindowRenderContextPtr;
 
-class DWindowRenderContext
-	: public DRenderContext
-{
+//
+class DWindowRenderContext;
+using DWindowRenderContextPtr = DIntrusivePtr< DWindowRenderContext >;
+
+
+//
+class DWindowRenderContext : public DRenderContext {
 public:
-	~DWindowRenderContext( void );
+	//
+	~DWindowRenderContext();
 
 	void Present();
 	void SetFullscreenState( bool blFullscreen );
-	
-	DID3D11RenderTargetViewPtr GetBackBufferView( void ) const;
+
+	DID3D11RenderTargetViewPtr GetBackBufferView() const;
 
 private:
-	DIDXGISwapChain1Ptr m_swapChain;
-	DID3D11RenderTargetViewPtr m_backBufferView;
+	//
+	DIDXGISwapChain1Ptr			m_swapChain;
+	DID3D11RenderTargetViewPtr	m_backBufferView;
+	DWindowContextConfig		m_windowContextConfig;
 
-	DWindowContextConfig m_windowContextConfig;
 protected:
-	friend DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager, 
-															   const DWindowContextConfig &config, 
-															   HRESULT *returnCode );
-	
-	explicit DWindowRenderContext( DRenderResourceManagerPtr manager,
-								   DIDXGISwapChain1Ptr swapChain,
-								   DID3D11RenderTargetViewPtr backBufferView,
-								   const DWindowContextConfig &config );
+	//
+	friend DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager,
+		const DWindowContextConfig &config,
+		HRESULT *returnCode );
 
+	explicit DWindowRenderContext( DRenderResourceManagerPtr manager,
+		DIDXGISwapChain1Ptr swapChain,
+		DID3D11RenderTargetViewPtr backBufferView,
+		const DWindowContextConfig &config );
 };
 
+
+//
 DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager, const DWindowContextConfig &config, HRESULT *returnCode );
 
 #endif

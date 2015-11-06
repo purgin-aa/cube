@@ -14,17 +14,16 @@ using i64 = int64_t;
 using f32 = float;
 using f64 = double;
 
-namespace DTools
-{
-	template <typename T>
-	void ClearStruct( T &object )
-	{
+namespace DTools {
+	//
+	template< typename T >
+	void ClearStruct( T &object ) {
 		std::memset( &object, 0, sizeof( T ) );
 	}
 
-	template <typename T, std::size_t N>
-	std::size_t StaticArraySize( const T( &)[ N ] )
-	{
+	//
+	template< typename T, std::size_t N >
+	std::size_t StaticArraySize( const T( &)[N] ) {
 		return N;
 	}
 }
