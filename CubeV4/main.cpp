@@ -1,9 +1,4 @@
-#include <windows.h>
-
-#include <SDL.h>
-#include <SDL_events.h>
-#include <SDL_syswm.h>
-
+#include "Precompiled.h"
 #include "DRenderContext.h"
 #include "Utility/DScopeGuard.h"
 #include "DRenderResourceManager.h"

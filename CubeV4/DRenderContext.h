@@ -1,8 +1,5 @@
 #pragma once
 
-#include <d3d11.h>
-#include <DirectXMath.h>
-
 #include "DRenderBasicTypes.h"
 #include "DRenderResourceManager.h"
 #include "DMaterialController.h"

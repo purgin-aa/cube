@@ -1,9 +1,10 @@
+#include "Precompiled.h"
 #include "DWindowRenderContext.h"
 
 
 //
 DWindowRenderContext::~DWindowRenderContext() {
-	if( m_swapChain && m_windowContextConfig.blFullscreen )
+	if( m_swapChain && m_windowContextConfig.fullscreen )
 		m_swapChain->SetFullscreenState( false, nullptr );
 }
 
@@ -19,7 +20,7 @@ void DWindowRenderContext::Present() {
 void DWindowRenderContext::SetFullscreenState( bool blFullscreen ) {
 	assert( m_swapChain );
 	m_swapChain->SetFullscreenState( blFullscreen, nullptr );
-	m_windowContextConfig.blFullscreen = blFullscreen;
+	m_windowContextConfig.fullscreen = blFullscreen;
 }
 
 
@@ -102,7 +103,7 @@ DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr ma
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreenDesc;
 	DTools::ClearStruct( fullscreenDesc );
 	fullscreenDesc.RefreshRate = config.refreshRate;
-	fullscreenDesc.Windowed = !config.blFullscreen;
+	fullscreenDesc.Windowed = !config.fullscreen;
 
 	hr = factory->CreateSwapChainForHwnd( 
 		device.Get(),

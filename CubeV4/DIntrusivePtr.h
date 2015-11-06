@@ -1,7 +1,5 @@
 #pragma once
 
-#include <type_traits>
-
 template< class T >
 class DIntrusivePtr {
 public:

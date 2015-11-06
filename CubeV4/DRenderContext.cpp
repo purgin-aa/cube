@@ -1,6 +1,5 @@
+#include "Precompiled.h"
 #include "DRenderContext.h"
-
-#include <assert.h>
 
 //
 //// IMPLEMENTATION DRenderObjectFactory

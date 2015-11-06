@@ -1,6 +1,5 @@
+#include "Precompiled.h"
 #include "DRenderResourceManager.h"
-
-#include <assert.h>
 
 
 //

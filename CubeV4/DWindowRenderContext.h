@@ -4,12 +4,11 @@
 
 //
 struct DWindowContextConfig {
-	HWND currentWindow;
-	DXGI_RATIONAL refreshRate;
-	u16 width;
-	u16 height;
-	//
-	bool blFullscreen;
+	HWND			currentWindow;
+	DXGI_RATIONAL	refreshRate;
+	u16				width;
+	u16				height;
+	bool			fullscreen;
 	// todo quality
 };
 
@@ -38,11 +37,13 @@ private:
 
 protected:
 	//
-	friend DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager,
+	friend DWindowRenderContextPtr DCreateWindowRenderContext( 
+		DRenderResourceManagerPtr manager,
 		const DWindowContextConfig &config,
 		HRESULT *returnCode );
 
-	explicit DWindowRenderContext( DRenderResourceManagerPtr manager,
+	explicit DWindowRenderContext( 
+		DRenderResourceManagerPtr manager,
 		DIDXGISwapChain1Ptr swapChain,
 		DID3D11RenderTargetViewPtr backBufferView,
 		const DWindowContextConfig &config );
