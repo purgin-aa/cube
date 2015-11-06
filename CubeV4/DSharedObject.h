@@ -10,12 +10,12 @@ public:
 	}
 
 	//
-	inline std::size_t AddRef() {
+	std::size_t AddRef() {
 		return m_refs.fetch_add( 1 ) + 1;
 	}
 
 	//
-	inline std::size_t Release() {
+	std::size_t Release() {
 		if( std::size_t oldValue = m_refs.fetch_sub( 1 ) == 1 ) {
 			delete this;
 			return 0;

@@ -116,7 +116,7 @@ DID3D11DeviceContextPtr DRenderResourceManager::GetDeviceContext() const {
 
 
 //
-inline DRenderResourceManager::DRenderResourceManager( DID3D11DevicePtr device, DID3D11DeviceContextPtr context )
+DRenderResourceManager::DRenderResourceManager( DID3D11DevicePtr device, DID3D11DeviceContextPtr context )
 	: m_device( device )
 	, m_deviceContext( context ) {
 }

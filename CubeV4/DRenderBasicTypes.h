@@ -21,9 +21,9 @@ using DSimpleMeshPtr = DIntrusivePtr< DSimpleMesh >;
 class DVertexBufferView : public DSharedObject {
 public:
 	//
-	inline DID3D11BufferPtr GetVertexBuffer() const;
-	inline u32 GetStride() const;
-	inline u32 GetOffset() const;
+	DID3D11BufferPtr GetVertexBuffer() const;
+	u32 GetStride() const;
+	u32 GetOffset() const;
 
 private:
 	//
@@ -43,9 +43,9 @@ protected:
 class DIndexBufferView : public DSharedObject {
 public:
 	//
-	inline DID3D11BufferPtr GetIndexBuffer() const;
-	inline DXGI_FORMAT GetIndexBufferFormat() const;
-	inline u32 GetIndexBufferOffset() const;
+	DID3D11BufferPtr GetIndexBuffer() const;
+	DXGI_FORMAT GetIndexBufferFormat() const;
+	u32 GetIndexBufferOffset() const;
 
 private:
 	//
@@ -64,9 +64,9 @@ protected:
 class DSimpleMesh : DSharedObject {
 public:
 	//
-	inline DVertexBufferViewPtr GetVertices() const;
-	inline DIndexBufferViewPtr GetIndices() const;
-	inline u32 GetIndexCount() const;
+	DVertexBufferViewPtr GetVertices() const;
+	DIndexBufferViewPtr GetIndices() const;
+	u32 GetIndexCount() const;
 
 private:
 	//

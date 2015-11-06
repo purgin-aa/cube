@@ -3,109 +3,108 @@
 
 #include <type_traits>
 
-template < class T >
+template< class T >
 class DIntrusivePtr {
 public:
-	inline explicit DIntrusivePtr() noexcept
+	explicit DIntrusivePtr() noexcept
 		: m_ptr( nullptr ) {
 	}
 
-	inline explicit DIntrusivePtr( T *ptr, bool addref = true ) noexcept
+	explicit DIntrusivePtr( T *ptr, bool addref = true ) noexcept
 		: m_ptr( ptr ) {
 		if( ptr && addref )
 			m_ptr->AddRef();
 	}
 
 	template< class Y >
-	inline explicit DIntrusivePtr( DIntrusivePtr<Y> &other )
+	explicit DIntrusivePtr( DIntrusivePtr<Y> &other )
 		: m_ptr( other.Get() ) {
 		static_assert( std::is_base_of<T, Y>::value, "Incorrect type conversion" );
 		if( m_ptr )
 			m_ptr->AddRef();
 	}
 
-	inline DIntrusivePtr( std::nullptr_t )
+	DIntrusivePtr( std::nullptr_t )
 		: DIntrusivePtr() {
 	}
 
-	inline DIntrusivePtr( DIntrusivePtr &&other ) noexcept
+	DIntrusivePtr( DIntrusivePtr &&other ) noexcept
 		: m_ptr( other.m_ptr ) {
 		other.m_ptr = nullptr;
 	}
 
-	inline DIntrusivePtr( const DIntrusivePtr &other ) noexcept
+	DIntrusivePtr( const DIntrusivePtr &other ) noexcept
 		: m_ptr( other.m_ptr ) {
 		if( m_ptr )
 			m_ptr->AddRef();
 	}
 
-	inline ~DIntrusivePtr() {
+	~DIntrusivePtr() {
 		if( m_ptr )
 			m_ptr->Release();
 	}
 
-	inline T *operator->() const noexcept {
+	T *operator->() const noexcept {
 		return m_ptr;
 	}
 
-	inline T **operator&() noexcept {
+	T **operator&() noexcept {
 
 		return &m_ptr;
 	}
 
-	inline T &operator *() const {
+	T &operator *() const {
 		return *m_ptr;
 	}
 
-	inline bool IsValid() const noexcept {
+	bool IsValid() const noexcept {
 		return m_ptr != nullptr;
 	}
 
-	inline bool operator == ( const DIntrusivePtr & other ) const {
+	bool operator == ( const DIntrusivePtr & other ) const {
 		return m_ptr == other.m_ptr;
 	}
 
-	inline bool operator != ( const DIntrusivePtr &other ) const {
+	bool operator != ( const DIntrusivePtr &other ) const {
 		return m_ptr != other.m_ptr;
 	}
 
-
-	inline DIntrusivePtr &operator = ( const DIntrusivePtr &other ) {
+	DIntrusivePtr &operator = ( const DIntrusivePtr &other ) {
 		Reset( other.m_ptr );
 
 		return *this;
 	}
 
 	template <class Y>
-	inline DIntrusivePtr<T> &operator = ( const DIntrusivePtr<Y> &other ) {
+	DIntrusivePtr<T> &operator = ( const DIntrusivePtr<Y> &other ) {
 		static_assert( std::is_base_of<T, Y>::value, "Incorrect type conversion" );
 
 		Reset( other.Get() );
 		return *this;
 	}
 
-	inline DIntrusivePtr &operator = ( T* ptr ) noexcept {
+	DIntrusivePtr &operator = ( T* ptr ) noexcept {
 		Reset( ptr );
 		return *this;
 	}
 
-	inline DIntrusivePtr &operator = ( std::nullptr_t ) {
+	DIntrusivePtr &operator = ( std::nullptr_t ) {
 		Reset();
 		return *this;
 	}
 
-	inline T* Get() const {
+	T* Get() const {
 		return m_ptr;
 	}
 
-	inline void Reset() {
+	void Reset() {
 		if( m_ptr ) {
 			m_ptr->Release();
 			m_ptr = nullptr;
 		}
 	}
 
-	inline void Reset( T *ptr, bool addRef = true ) {
+	void Reset( T *ptr, bool addRef = true ) {
 		if( m_ptr == ptr )
 			return;
 

@@ -6,7 +6,7 @@
 template< class func_t >
 struct DScopeGuard {
 	//
-	inline explicit DScopeGuard( func_t &&exit_fn )
+	explicit DScopeGuard( func_t &&exit_fn )
 		: m_exit_fn( std::move( exit_fn ) ), m_enabled( true ) {
 	}
 
