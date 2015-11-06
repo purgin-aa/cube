@@ -1,5 +1,4 @@
-#ifndef _DINTRUSIVEPTR_H_
-#define _DINTRUSIVEPTR_H_
+#pragma once
 
 #include <type_traits>
 
@@ -118,5 +117,3 @@ private:
 	//
 	T* m_ptr;
 };
-
-#endif

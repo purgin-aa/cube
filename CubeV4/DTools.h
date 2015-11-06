@@ -1,5 +1,4 @@
-#ifndef _DTOOLS_H_
-#define _DTOOLS_H_
+#pragma once
 
 #include <algorithm>
 
@@ -27,5 +26,3 @@ namespace DTools {
 		return N;
 	}
 }
-
-#endif

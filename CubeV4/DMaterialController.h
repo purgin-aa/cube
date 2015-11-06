@@ -1,5 +1,4 @@
-#ifndef _DMATERIALCONTROLLER_H_
-#define _DMATERIALCONTROLLER_H_
+#pragma once
 
 #include "DIntrusivePtr.h"
 #include "DSharedObject.h"
@@ -20,5 +19,3 @@ public:
 	virtual void FreeContext( DRenderContextPtr ) = 0;
 	virtual void BindMaterial( DIntrusivePtr<DMaterial> ) = 0;
 };
-
-#endif

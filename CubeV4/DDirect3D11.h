@@ -1,5 +1,4 @@
-#ifndef _DDIRECT3D11_H_
-#define _DDIRECT3D11_H_
+#pragma once
 
 #include <d3d11.h>
 #include <dxgi1_2.h>
@@ -31,5 +30,3 @@ using DIDXGIFactory2Ptr = DIntrusivePtr< IDXGIFactory2 >;
 using DIDXGIAdapter2Ptr = DIntrusivePtr< IDXGIAdapter2 >;
 // Device
 using DIDXGIDevice2Ptr = DIntrusivePtr< IDXGIDevice2 >;
-
-#endif

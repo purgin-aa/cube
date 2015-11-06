@@ -1,5 +1,4 @@
-#ifndef _RENDERBASISTYPES_H_
-#define _RENDERBASISTYPES_H_
+#pragma once
 
 #include "DDirect3D11.h"
 
@@ -80,5 +79,3 @@ protected:
 
 	explicit DSimpleMesh( DVertexBufferViewPtr vertices, DIndexBufferViewPtr indices, u32 indexCount );
 };
-
-#endif

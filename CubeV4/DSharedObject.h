@@ -1,5 +1,4 @@
-#ifndef _DSHAREDOBJECT_H_
-#define _DSHAREDOBJECT_H_
+#pragma once
 
 #include <atomic>
 
@@ -28,5 +27,3 @@ private:
 	//
 	std::atomic_size_t m_refs;
 };
-
-#endif

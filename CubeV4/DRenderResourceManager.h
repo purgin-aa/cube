@@ -1,5 +1,4 @@
-#ifndef _DRENDERRESOURCEMANAGER_H_
-#define _DRENDERRESOURCEMANAGER_H_
+#pragma once
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -43,5 +42,3 @@ protected:
 
 // Create Func
 DRenderResourceManagerPtr DCreateResourceManager( HRESULT *returnCode );
-
-#endif

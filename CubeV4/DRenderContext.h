@@ -1,5 +1,4 @@
-#ifndef _DRENDER_CONTEXT_H_
-#define _DRENDER_CONTEXT_H_
+#pragma once
 
 #include <d3d11.h>
 #include <DirectXMath.h>
@@ -67,5 +66,3 @@ protected:
 
 	explicit DRenderContext( DRenderResourceManagerPtr manager );
 };
-
-#endif

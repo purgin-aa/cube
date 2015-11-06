@@ -1,6 +1,5 @@
 #include "DRenderBasicTypes.h"
 
-
 //
 DID3D11BufferPtr DVertexBufferView::GetVertexBuffer() const {
 	return m_vertexBuffer;
