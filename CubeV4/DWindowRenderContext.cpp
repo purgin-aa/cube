@@ -17,10 +17,10 @@ void DWindowRenderContext::Present() {
 
 
 //
-void DWindowRenderContext::SetFullscreenState( bool blFullscreen ) {
+void DWindowRenderContext::SetFullscreenState( bool enable ) {
 	assert( m_swapChain );
-	m_swapChain->SetFullscreenState( blFullscreen, nullptr );
-	m_windowContextConfig.fullscreen = blFullscreen;
+	m_swapChain->SetFullscreenState( enable, nullptr );
+	m_windowContextConfig.fullscreen = enable;
 }
 
 
@@ -55,7 +55,7 @@ DWindowRenderContext::DWindowRenderContext(
 
 
 //
-DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode ) {
+DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode ) {
 	assert( manager );
 	assert( config.currentWindow );
 	assert( ( config.width > 0u ) && ( config.height > 0u ) );
@@ -90,7 +90,7 @@ DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr ma
 	DIDXGISwapChain1Ptr swapChain;
 
 	DXGI_SWAP_CHAIN_DESC1 chainDesc;
-	DTools::ClearStruct( chainDesc );
+	DTools::MemZero( chainDesc );
 	chainDesc.Width = config.width;
 	chainDesc.Height = config.height;
 	chainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -101,7 +101,7 @@ DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr ma
 	chainDesc.BufferCount = 1;
 
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreenDesc;
-	DTools::ClearStruct( fullscreenDesc );
+	DTools::MemZero( fullscreenDesc );
 	fullscreenDesc.RefreshRate = config.refreshRate;
 	fullscreenDesc.Windowed = !config.fullscreen;
 

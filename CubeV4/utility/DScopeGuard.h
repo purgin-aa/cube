@@ -1,15 +1,14 @@
 #pragma once
 
-#include <utility>
-
+//
 template< class func_t >
 struct DScopeGuard {
 	//
-	explicit DScopeGuard( func_t &&exit_fn )
+	explicit DScopeGuard( func_t&& exit_fn )
 		: m_exit_fn( std::move( exit_fn ) ), m_enabled( true ) {
 	}
 
-	DScopeGuard( DScopeGuard &&other )
+	DScopeGuard( DScopeGuard&& other )
 		: m_exit_fn( other.m_exit_fn ), m_enabled( other.m_enabled ) {
 		other.m_enabled = false;
 	}
@@ -19,13 +18,13 @@ struct DScopeGuard {
 			m_exit_fn();
 	}
 
-	DScopeGuard( const DScopeGuard & ) = delete;
-	DScopeGuard &operator=( const DScopeGuard & ) = delete;
+	DScopeGuard( const DScopeGuard& ) = delete;
+	DScopeGuard& operator=( const DScopeGuard& ) = delete;
 
 private:
 	//
-	func_t m_exit_fn;
-	bool m_enabled;
+	func_t	m_exit_fn;
+	bool	m_enabled;
 };
 
 

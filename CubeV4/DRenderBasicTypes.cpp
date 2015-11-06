@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 #include "DRenderBasicTypes.h"
 
+
 //
 DID3D11BufferPtr DVertexBufferView::GetVertexBuffer() const {
 	return m_vertexBuffer;
@@ -20,10 +21,10 @@ u32 DVertexBufferView::GetOffset() const {
 
 
 //
-DVertexBufferView::DVertexBufferView( DID3D11BufferPtr buffer, u32 stride, u32 offset ):
-	m_vertexBuffer( buffer ),
-	m_stride( stride ),
-	m_offset( offset ) {
+DVertexBufferView::DVertexBufferView( DID3D11BufferPtr buffer, u32 stride, u32 offset )
+	: m_vertexBuffer( buffer )
+	, m_stride( stride )
+	, m_offset( offset ) {
 }
 
 
@@ -46,10 +47,10 @@ u32 DIndexBufferView::GetIndexBufferOffset() const {
 
 
 //
-DIndexBufferView::DIndexBufferView( DID3D11BufferPtr buffer, DXGI_FORMAT format, u32 offset ):
-	m_indexBuffer( buffer ),
-	m_format( format ),
-	m_offset( offset ) {
+DIndexBufferView::DIndexBufferView( DID3D11BufferPtr buffer, DXGI_FORMAT format, u32 offset )
+	: m_indexBuffer( buffer )
+	, m_format( format )
+	, m_offset( offset ) {
 }
 
 
@@ -72,8 +73,8 @@ u32 DSimpleMesh::GetIndexCount() const {
 
 
 //
-DSimpleMesh::DSimpleMesh( DVertexBufferViewPtr vertices, DIndexBufferViewPtr indices, u32 indexCount ):
-	m_vertices( vertices ),
-	m_indices( indices ),
-	m_indexCount( indexCount ) {
+DSimpleMesh::DSimpleMesh( DVertexBufferViewPtr vertices, DIndexBufferViewPtr indices, u32 indexCount )
+	: m_vertices( vertices )
+	, m_indices( indices )
+	, m_indexCount( indexCount ) {
 }

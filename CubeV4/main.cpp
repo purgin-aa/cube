@@ -24,11 +24,12 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	if( !window )
 		return -1;
 
-	auto windowDestroyGuard = DMakeScopeGuard( [&]() { SDL_DestroyWindow( window ); } );
+	auto windowDestroyGuard = DMakeScopeGuard( [&]() { 
+		SDL_DestroyWindow( window ); 
+	} );
 
 	SDL_SysWMinfo info;
-	DTools::ClearStruct( info );
-
+	DTools::MemZero( info );
 	if( SDL_GetWindowWMInfo( window, &info ) == SDL_FALSE ) {
 		return -1;
 	}
@@ -41,20 +42,19 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 		false // fullscreen?
 	};
 
-	HRESULT hr = S_OK;
-
-	DRenderResourceManagerPtr manager = DCreateResourceManager( nullptr );
+	DRenderResourceManagerPtr manager = DRenderResourceManager::Create( nullptr );
 	if( !manager )
 		return -1;
 
-	DWindowRenderContextPtr windowContext = DCreateWindowRenderContext( manager, windowContextConfig, &hr );
+	HRESULT hr = S_OK;
+	DWindowRenderContextPtr windowContext = DWindowRenderContext::Create( manager, windowContextConfig, &hr );
 	if( !windowContext )
 		return -1;
 
 	bool running = true;
 	SDL_Event event;
 
-	bool blFullscreen = false;
+	bool fullscreen = false;
 
 	while( running ) {
 		while( SDL_PollEvent( &event ) ) {
@@ -70,8 +70,8 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 							running = false;
 							break;
 						case SDLK_F11: {
-							blFullscreen = !blFullscreen;
-							windowContext->SetFullscreenState( blFullscreen );
+							fullscreen = !fullscreen;
+							windowContext->SetFullscreenState( fullscreen );
 							break;
 						}
 					}
@@ -79,7 +79,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 				}
 			}
 		}
-		f32 color[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+		const f32 color[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
 		windowContext->FillCurrentTargetView( color );
 		windowContext->Present();
 	}

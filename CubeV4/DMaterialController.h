@@ -17,5 +17,5 @@ public:
 
 	virtual void PrepareContext( DRenderContextPtr ) = 0;
 	virtual void FreeContext( DRenderContextPtr ) = 0;
-	virtual void BindMaterial( DIntrusivePtr<DMaterial> ) = 0;
+	virtual void BindMaterial( DIntrusivePtr< DMaterial > ) = 0;
 };

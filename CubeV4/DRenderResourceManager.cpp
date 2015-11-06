@@ -58,7 +58,7 @@ DID3D11BufferPtr DRenderResourceManager::CreateBuffer( u32 bufferSize, const voi
 	assert( m_device );
 
 	D3D11_BUFFER_DESC bufferDesc;
-	DTools::ClearStruct( bufferDesc );
+	DTools::MemZero( bufferDesc );
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.ByteWidth = bufferSize;
 	bufferDesc.BindFlags = bindFlags;
@@ -69,7 +69,7 @@ DID3D11BufferPtr DRenderResourceManager::CreateBuffer( u32 bufferSize, const voi
 
 	if( bufferData ) {
 		D3D11_SUBRESOURCE_DATA resourceData;
-		DTools::ClearStruct( resourceData );
+		DTools::MemZero( resourceData );
 		resourceData.pSysMem = bufferData;
 		hr = m_device->CreateBuffer( &bufferDesc, &resourceData, &buffer );
 	} else {
@@ -103,18 +103,6 @@ DVertexBufferViewPtr DRenderResourceManager::CreateVertexBufferView( DID3D11Buff
 
 
 //
-DID3D11DevicePtr DRenderResourceManager::GetDevice() const {
-	return m_device;
-}
-
-
-//
-DID3D11DeviceContextPtr DRenderResourceManager::GetDeviceContext() const {
-	return m_deviceContext;
-}
-
-
-//
 DRenderResourceManager::DRenderResourceManager( DID3D11DevicePtr device, DID3D11DeviceContextPtr context )
 	: m_device( device )
 	, m_deviceContext( context ) {
@@ -122,23 +110,21 @@ DRenderResourceManager::DRenderResourceManager( DID3D11DevicePtr device, DID3D11
 
 
 //
-DRenderResourceManagerPtr DCreateResourceManager( HRESULT * returnCode ) {
+DRenderResourceManagerPtr DRenderResourceManager::Create( HRESULT* returnCode ) {
 	DID3D11DevicePtr device;
 	DID3D11DeviceContextPtr deviceContext;
 	D3D_FEATURE_LEVEL featureLevel;
 
-	HRESULT hr = S_OK;
-	UINT uiFlags = 0;
-
+	UINT deviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED;
 #if defined( DEBUG ) || defined( _DEBUG )
-	uiFlags |= D3D11_CREATE_DEVICE_DEBUG;
+	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	hr = D3D11CreateDevice( 
+	HRESULT hr = D3D11CreateDevice(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
-		uiFlags,
+		deviceFlags,
 		nullptr,
 		0,
 		D3D11_SDK_VERSION,

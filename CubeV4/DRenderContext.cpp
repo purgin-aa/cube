@@ -489,7 +489,7 @@ void DRenderContext::DrawIndexed( u32 indexCount, u32 startIndexLocation, u32 st
 
 
 //
-void DRenderContext::FillCurrentTargetView( f32 color[4] ) {
+void DRenderContext::FillCurrentTargetView( const f32 color[4] ) {
 	assert( m_deviceContext );
 	assert( m_renderTarget );
 	m_deviceContext->ClearRenderTargetView( m_renderTarget.Get(), color );
@@ -518,7 +518,6 @@ DID3D11DeviceContextPtr DRenderContext::GetDeviceContext() const {
 DRenderContext::DRenderContext( DRenderResourceManagerPtr manager )
 	: m_manager( manager ) {
 	assert( m_manager );
-
 	m_deviceContext = manager->GetDeviceContext();
 	assert( m_deviceContext );
 	m_renderTargetSize = { 0u, 0u };

@@ -22,10 +22,12 @@ using DWindowRenderContextPtr = DIntrusivePtr< DWindowRenderContext >;
 class DWindowRenderContext : public DRenderContext {
 public:
 	//
+	static DWindowRenderContextPtr Create( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode );
+	//
 	~DWindowRenderContext();
 
 	void Present();
-	void SetFullscreenState( bool blFullscreen );
+	void SetFullscreenState( bool enable );
 
 	DID3D11RenderTargetViewPtr GetBackBufferView() const;
 
@@ -37,18 +39,9 @@ private:
 
 protected:
 	//
-	friend DWindowRenderContextPtr DCreateWindowRenderContext( 
-		DRenderResourceManagerPtr manager,
-		const DWindowContextConfig &config,
-		HRESULT *returnCode );
-
-	explicit DWindowRenderContext( 
+	DWindowRenderContext( 
 		DRenderResourceManagerPtr manager,
 		DIDXGISwapChain1Ptr swapChain,
 		DID3D11RenderTargetViewPtr backBufferView,
 		const DWindowContextConfig &config );
 };
-
-
-//
-DWindowRenderContextPtr DCreateWindowRenderContext( DRenderResourceManagerPtr manager, const DWindowContextConfig &config, HRESULT *returnCode );

@@ -3,7 +3,8 @@
 namespace DTools {
 	//
 	template< typename T >
-	void ClearStruct( T &object ) {
+	void MemZero( T& object ) {
+		static_assert( !std::is_pointer< T >::value, "We want to zero only values, not pointers" );
 		std::memset( &object, 0, sizeof( T ) );
 	}
 

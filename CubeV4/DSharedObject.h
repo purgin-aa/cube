@@ -1,5 +1,6 @@
 #pragma once
 
+//
 class DSharedObject {
 public:
 	//
@@ -7,13 +8,13 @@ public:
 	}
 
 	//
-	std::size_t AddRef() {
+	size_t AddRef() {
 		return m_refs.fetch_add( 1 ) + 1;
 	}
 
 	//
-	std::size_t Release() {
-		if( std::size_t oldValue = m_refs.fetch_sub( 1 ) == 1 ) {
+	size_t Release() {
+		if( size_t oldValue = m_refs.fetch_sub( 1 ) == 1 ) {
 			delete this;
 			return 0;
 		} else {
