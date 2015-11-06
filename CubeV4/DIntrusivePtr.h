@@ -25,8 +25,7 @@ public:
 		: DIntrusivePtr() {
 	}
 
-	DIntrusivePtr( DIntrusivePtr&& other )
-		: m_ptr( other.m_ptr ) {
+	DIntrusivePtr( DIntrusivePtr&& other ) : m_ptr( other.m_ptr ) {
 		other.m_ptr = nullptr;
 	}
 
@@ -111,7 +110,7 @@ public:
 			m_ptr->AddRef();
 	}
 
-	operator bool() const {
+	explicit operator bool() const {
 		return IsValid();
 	}
 
