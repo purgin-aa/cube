@@ -53,9 +53,63 @@ DWindowRenderContext::DWindowRenderContext(
 	SetRenderTargetView( backBufferView, size );
 }
 
+//
+static bool __check_displayMode( IDXGIAdapter2 *adapter, u16 width, u16 height, DXGI_RATIONAL refreshRate, HRESULT *returnCode ) {
+#define LM_CHECKRESULT( code, pcode, r ) if ( FAILED( code ) ) { if ( pcode ) *pcode = code; return r; }
+	assert( adapter );
+	
+	HRESULT hr = S_OK;
+
+	// Get output
+	DIntrusivePtr<IDXGIOutput> output;
+	hr = adapter->EnumOutputs( 0, &output );
+
+	LM_CHECKRESULT( hr, returnCode, false );
+
+	UINT numModes = 0;
+	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	// Get numModes
+	hr = output->GetDisplayModeList(
+		format,
+		0,
+		&numModes,
+		nullptr );
+
+	LM_CHECKRESULT( hr, returnCode, false );
+
+	DXGI_MODE_DESC *displayModes = new DXGI_MODE_DESC[ numModes ];
+	
+	// get mode descs
+	output->GetDisplayModeList( 
+		format, 
+		0, 
+		&numModes, 
+		displayModes );
+
+	DXGI_MODE_DESC *current = displayModes;
+	DXGI_MODE_DESC *end = displayModes + numModes;
+
+	while ( current != end )
+	{
+		if ( ( current->Width == static_cast< UINT >( width ) ) &&
+			 ( current->Height == static_cast< UINT >( height ) ) &&
+			 ( current->RefreshRate.Numerator == refreshRate.Numerator ) &&
+			 ( current->RefreshRate.Denominator == refreshRate.Denominator ) )
+			break;
+		else ++current;
+	}
+	
+	delete[] displayModes;
+
+	return ( current != end ) ? true : false;
+#undef LM_CHECKRESULT
+}
 
 //
 DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode ) {
+#define LM_CHECKRESULT( code, pcode, r ) if ( FAILED( code ) ) { if ( pcode ) *pcode = code; return r; }
+
 	assert( manager );
 	assert( config.currentWindow );
 	assert( ( config.width > 0u ) && ( config.height > 0u ) );
@@ -65,28 +119,26 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 
 	DIDXGIDevice2Ptr dxgiDevice;
 	HRESULT hr = device->QueryInterface( __uuidof( IDXGIDevice2 ), ( void ** )&dxgiDevice );
-	if( FAILED( hr ) ) {
-		if( returnCode )
-			*returnCode = hr;
-		return nullptr;
-	}
+	LM_CHECKRESULT( hr, returnCode, nullptr );
 
 	DIDXGIAdapter2Ptr dxgiAdapter;
 	hr = dxgiDevice->GetParent( __uuidof( IDXGIAdapter2 ), ( void** )&dxgiAdapter );
-	if( FAILED( hr ) ) {
-		if( returnCode )
-			*returnCode = hr;
-		return nullptr;
-	}
+	LM_CHECKRESULT( hr, returnCode, nullptr );
 
+	// check display mode
+	if ( !__check_displayMode(
+		dxgiAdapter.Get(),
+		config.width,
+		config.height,
+		config.refreshRate,
+		returnCode ) )
+		return nullptr;
+		
 	DIDXGIFactory2Ptr factory;
 	hr = dxgiAdapter->GetParent( __uuidof( IDXGIFactory2 ), ( void** )&factory );
-	if( FAILED( hr ) ) {
-		if( returnCode )
-			*returnCode = hr;
-		return nullptr;
-	}
+	LM_CHECKRESULT( hr, returnCode, nullptr );
 
+	//
 	DIDXGISwapChain1Ptr swapChain;
 
 	DXGI_SWAP_CHAIN_DESC1 chainDesc;
@@ -112,22 +164,16 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 		&fullscreenDesc,
 		nullptr,
 		&swapChain );
-	if( FAILED( hr ) ) {
-		if( returnCode )
-			*returnCode = hr;
-		return nullptr;
-	}
+	LM_CHECKRESULT( hr, returnCode, nullptr );
 
 	DID3D11Texture2DPtr backBuffer;
 	swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( void** )&backBuffer );
 
 	DID3D11RenderTargetViewPtr backBufferView = manager->CreateRenderTargetView( backBuffer, 	&hr );
-	if( FAILED( hr ) ) {
-		if( returnCode )
-			*returnCode = hr;
-		return nullptr;
-	}
+	LM_CHECKRESULT( hr, returnCode, nullptr );
 
 	DWindowRenderContextPtr context( new DWindowRenderContext( manager, swapChain, backBufferView, config ) );
 	return context;
+
+#undef LM_CHECKRESULT
 }
