@@ -113,7 +113,7 @@
 ////	return indexBufferPtr;
 ////}
 //
-//DRenderContextPtr DRenderObjectFactory::GetContext( void )
+//DRenderContextPtr DRenderObjectFactory::GetContext()
 //{
 //	return m_context;
 //}
@@ -147,7 +147,7 @@
 //
 //}
 //
-//void DRenderContext::SetPerspectiveMode( void )
+//void DRenderContext::SetPerspectiveMode()
 //{
 //	assert( m_deviceContext );
 //	assert( m_config.fovAngle > 0.0f );
@@ -184,17 +184,17 @@
 //								  0 );
 //}
 //
-//DID3D11DevicePtr DRenderContext::GetDevice( void )
+//DID3D11DevicePtr DRenderContext::GetDevice()
 //{
 //	return m_device;
 //}
 //
-//DID3D11DeviceContextPtr DRenderContext::GetDeviceContext( void )
+//DID3D11DeviceContextPtr DRenderContext::GetDeviceContext()
 //{
 //	return m_deviceContext;
 //}
 //
-//void DRenderContext::Present( void )
+//void DRenderContext::Present()
 //{
 //	assert( m_swapChain );
 //
@@ -236,7 +236,7 @@
 //								  startVertexLocation );
 //}
 //
-//DRenderObjectFactoryPtr DRenderContext::GetRenderObjectFactory( void ) const
+//DRenderObjectFactoryPtr DRenderContext::GetRenderObjectFactory() const
 //{
 //	return m_objectFactory;
 //}
@@ -261,7 +261,7 @@
 //{
 //}
 //
-//void DRenderContext::UpdateStateMatrices( void )
+//void DRenderContext::UpdateStateMatrices()
 //{
 //	assert( m_deviceContext );
 //	assert( m_stateMatricesBuffer );
@@ -510,7 +510,7 @@ void DRenderContext::SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarge
 
 
 //
-DID3D11DeviceContextPtr DRenderContext::GetDeviceContext( void ) const {
+DID3D11DeviceContextPtr DRenderContext::GetDeviceContext() const {
 	return m_deviceContext;
 }
 

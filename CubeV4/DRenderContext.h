@@ -54,7 +54,7 @@ public:
 
 	void SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarget, const DRenderTargetSize &size );
 
-	DID3D11DeviceContextPtr GetDeviceContext( void ) const;
+	DID3D11DeviceContextPtr GetDeviceContext() const;
 
 protected:
 	//

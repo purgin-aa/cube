@@ -6,7 +6,7 @@
 template < class T >
 class DIntrusivePtr {
 public:
-	inline explicit DIntrusivePtr( void ) noexcept
+	inline explicit DIntrusivePtr() noexcept
 		: m_ptr( nullptr ) {
 	}
 
@@ -39,25 +39,25 @@ public:
 			m_ptr->AddRef();
 	}
 
-	inline ~DIntrusivePtr( void ) {
+	inline ~DIntrusivePtr() {
 		if( m_ptr )
 			m_ptr->Release();
 	}
 
-	inline T *operator->( void ) const noexcept {
+	inline T *operator->() const noexcept {
 		return m_ptr;
 	}
 
-	inline T **operator&( void ) noexcept {
+	inline T **operator&() noexcept {
 
 		return &m_ptr;
 	}
 
-	inline T &operator *( void ) const {
+	inline T &operator *() const {
 		return *m_ptr;
 	}
 
-	inline bool IsValid( void ) const noexcept {
+	inline bool IsValid() const noexcept {
 		return m_ptr != nullptr;
 	}
 
@@ -94,11 +94,11 @@ public:
 		return *this;
 	}
 
-	inline T* Get( void ) const {
+	inline T* Get() const {
 		return m_ptr;
 	}
 
-	inline void Reset( void ) {
+	inline void Reset() {
 		if( m_ptr ) {
 			m_ptr->Release();
 			m_ptr = nullptr;
@@ -118,7 +118,7 @@ public:
 			m_ptr->AddRef();
 	}
 
-	operator bool( void ) const {
+	operator bool() const {
 		return IsValid();
 	}
 

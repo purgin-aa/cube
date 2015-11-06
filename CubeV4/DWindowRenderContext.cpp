@@ -2,7 +2,7 @@
 
 
 //
-DWindowRenderContext::~DWindowRenderContext( void ) {
+DWindowRenderContext::~DWindowRenderContext() {
 	if( m_swapChain && m_windowContextConfig.blFullscreen )
 		m_swapChain->SetFullscreenState( false, nullptr );
 }
@@ -24,7 +24,7 @@ void DWindowRenderContext::SetFullscreenState( bool blFullscreen ) {
 
 
 //
-DID3D11RenderTargetViewPtr DWindowRenderContext::GetBackBufferView( void ) const {
+DID3D11RenderTargetViewPtr DWindowRenderContext::GetBackBufferView() const {
 	return m_backBufferView;
 }
 

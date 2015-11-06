@@ -16,7 +16,7 @@ using DRenderResourceManagerPtr = DIntrusivePtr< DRenderResourceManager >;
 class DRenderResourceManager : public DSharedObject {
 public:
 	//
-	~DRenderResourceManager( void );
+	~DRenderResourceManager();
 
 	DID3D11RenderTargetViewPtr CreateRenderTargetView( DID3D11Texture2DPtr texture, HRESULT *returnCode );
 	DID3D11VertexShaderPtr CreateVertexShaderFromBlob( DID3DBlobPtr shaderBlob, HRESULT *returnCode );
@@ -26,8 +26,8 @@ public:
 
 	DVertexBufferViewPtr CreateVertexBufferView( DID3D11BufferPtr vertices, u32 stride, u32 offset );
 
-	DID3D11DevicePtr GetDevice( void ) const;
-	DID3D11DeviceContextPtr GetDeviceContext( void ) const;
+	DID3D11DevicePtr GetDevice() const;
+	DID3D11DeviceContextPtr GetDeviceContext() const;
 
 private:
 	//

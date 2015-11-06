@@ -4,7 +4,7 @@
 
 
 //
-DRenderResourceManager::~DRenderResourceManager( void ) {
+DRenderResourceManager::~DRenderResourceManager() {
 	if( m_deviceContext )
 		m_deviceContext->ClearState();
 }
@@ -104,13 +104,13 @@ DVertexBufferViewPtr DRenderResourceManager::CreateVertexBufferView( DID3D11Buff
 
 
 //
-DID3D11DevicePtr DRenderResourceManager::GetDevice( void ) const {
+DID3D11DevicePtr DRenderResourceManager::GetDevice() const {
 	return m_device;
 }
 
 
 //
-DID3D11DeviceContextPtr DRenderResourceManager::GetDeviceContext( void ) const {
+DID3D11DeviceContextPtr DRenderResourceManager::GetDeviceContext() const {
 	return m_deviceContext;
 }
 
