@@ -143,6 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DColoredCube.cpp" />
+    <ClCompile Include="DColoredMaterial.cpp" />
+    <ClCompile Include="DDirect3DTools.cpp" />
+    <ClCompile Include="DFileTools.cpp" />
+    <ClCompile Include="DMaterialController.cpp" />
+    <ClCompile Include="DRender.cpp" />
     <ClCompile Include="DRenderBasicTypes.cpp" />
     <ClCompile Include="DRenderContext.cpp" />
     <ClCompile Include="DRenderResourceManager.cpp" />
@@ -156,9 +162,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DColoredCube.h" />
+    <ClInclude Include="DColoredMaterial.h" />
     <ClInclude Include="DDirect3D11.h" />
+    <ClInclude Include="DDirect3DTools.h" />
+    <ClInclude Include="DFileTools.h" />
     <ClInclude Include="DIntrusivePtr.h" />
     <ClInclude Include="DMaterialController.h" />
+    <ClInclude Include="DRender.h" />
     <ClInclude Include="DRenderBasicTypes.h" />
     <ClInclude Include="DRenderContext.h" />
     <ClInclude Include="DRenderResourceManager.h" />

@@ -5,49 +5,40 @@
 #include "DMaterialController.h"
 #include "DTools.h"
 
-
-//
-struct DRenderWVMatrices {
-	DirectX::XMMATRIX world;
-	DirectX::XMMATRIX view;
-};
-
-
-//
-struct DRenderPerspectiveModeDesc {
-	f32 fov;
-	f32 nearZ;
-	f32 farZ;
-};
-
-
 //
 struct DRenderTargetSize {
 	u16 width;
 	u16 height;
 };
 
-
 //
 class DRenderContext : public DSharedObject {
 public:
-	// projection mode
-	//void SetPerspectiveMode( const DRenderPerspectiveModeDesc &perspectiveModeDesc );
-	void SetWVMatrices( const DRenderWVMatrices &stateMatrices );
-
 	// shaders
-	void SetVertexShader( DID3D11VertexShaderPtr vertexShader );
-	void SetPixelShader( DID3D11PixelShaderPtr pixelShader );
+	void						SetVertexShader( ID3D11VertexShader *vertexShader );
+	void						SetPixelShader( ID3D11PixelShader *pixelShader );
+	void						SetInputLayout( ID3D11InputLayout *inputLayout );
+
+	// constant buffers
+	void						SetPixelShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer );
+	void						SetVertexShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer );
+
+	// vertices, indices
+	void						SetVertexBuffer( UINT slot, ID3D11Buffer *vertexBuffer, u32 stride, u32 offset );
+	void						SetIndexBuffer( ID3D11Buffer *indexBuffer, DXGI_FORMAT format, u32 offset );
 
 	//
-	void SetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY topology );
+	void						SetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY topology );
 
-	void DrawIndexed( u32 indexCount, u32 startIndexLocation, u32 startVertexLocation );
-	void FillCurrentTargetView( const f32 color[4] );
+	// draw
+	void						DrawIndexed( u32 indexCount, u32 startIndexLocation, u32 startVertexLocation );
+	void						FillCurrentTargetView( const f32 color[4] );
 
-	void SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarget, const DRenderTargetSize &size );
+	void						SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarget, const DRenderTargetSize &size );
+	const DRenderTargetSize&	GetRenderTargetSize() const;
 
-	DID3D11DeviceContextPtr GetDeviceContext() const;
+	DID3D11DeviceContextPtr		GetDeviceContext() const;
+	DRenderResourceManagerPtr	GetResourceManager() const;
 
 protected:
 	//
@@ -58,3 +49,6 @@ protected:
 
 	DRenderContext( DRenderResourceManagerPtr manager );
 };
+
+//
+using DRenderContextPtr = DIntrusivePtr<DRenderContext>;

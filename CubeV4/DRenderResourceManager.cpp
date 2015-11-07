@@ -101,6 +101,23 @@ DVertexBufferViewPtr DRenderResourceManager::CreateVertexBufferView( DID3D11Buff
 	return view;
 }
 
+//
+DIndexBufferViewPtr DRenderResourceManager::CreateIndexBufferView( DID3D11BufferPtr indexBufferPtr, DXGI_FORMAT format, u32 offset ) {
+	DIndexBufferViewPtr view( new DIndexBufferView( indexBufferPtr, format, offset ) );
+	return view;
+}
+
+//
+DSimpleMeshPtr DRenderResourceManager::CreateSimpleMesh( DVertexBufferView *vertexView, DIndexBufferView *indexView, DMaterialController::DMaterial *material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation ) {
+	assert( vertexView );
+	assert( indexView );
+	assert( material );
+	assert( indexCount > 0u );
+
+	DSimpleMeshPtr mesh( new DSimpleMesh( vertexView, indexView, material, indexCount, startVertexLocation, startIndexLocation ) );
+	return mesh;
+}
+
 
 //
 DRenderResourceManager::DRenderResourceManager( DID3D11DevicePtr device, DID3D11DeviceContextPtr context )

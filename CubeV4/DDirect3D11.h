@@ -14,6 +14,8 @@ using DID3D11PixelShaderPtr = DIntrusivePtr< ID3D11PixelShader >;
 using DID3D11BufferPtr = DIntrusivePtr< ID3D11Buffer >;
 using DID3DBlobPtr = DIntrusivePtr< ID3DBlob >;
 using DID3D11Texture2DPtr = DIntrusivePtr< ID3D11Texture2D >;
+using DID3D11InputLayoutPtr = DIntrusivePtr < ID3D11InputLayout >;
+
 
 // DXGI
 // SwapChain

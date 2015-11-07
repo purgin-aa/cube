@@ -3,6 +3,8 @@
 #include "Utility/DScopeGuard.h"
 #include "DRenderResourceManager.h"
 #include "DWindowRenderContext.h"
+#include "DRender.h"
+#include "DColoredCube.h"
 
 //
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
@@ -51,6 +53,28 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	if( !windowContext )
 		return -1;
 
+	DRenderPtr render = DRender::Create( windowContext.Get(), &hr );
+	if( !render )
+		return -1;
+
+	DRenderPerspectiveModeDesc perspectiveDesc = {
+		3.1415926535f / 4.f,
+		0.01f,
+		100.0f
+	};
+
+	render->SetPerspectiveProjectionMode( perspectiveDesc );
+	XMVECTOR Eye = { 0.0f, 4.0f, -10.0f, 0.0f };
+	XMVECTOR At =  { 0.0f, 1.0f,   0.0f, 0.0f };
+	XMVECTOR Up =  { 0.0f, 1.0f,   0.0f, 0.0f };
+	XMMATRIX view = XMMatrixLookAtLH( Eye, At, Up );
+
+	render->SetViewMatrix( view );
+
+	DSimpleMeshPtr coloredCube = DCreateColoredCube( manager, { 1.0f, 1.0f, 1.0f, 1.0f }, &hr );
+	if( !coloredCube )
+		return -1;
+
 	bool running = true;
 	SDL_Event event;
 
@@ -79,8 +103,9 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 				}
 			}
 		}
-		const f32 color[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-		windowContext->FillCurrentTargetView( color );
+		const XMFLOAT4 color = { 0.0f, 0.0f, 0.0f, 1.0f };
+		render->FillBackground( color );
+		render->DrawMesh( coloredCube.Get() );
 		windowContext->Present();
 	}
 

@@ -71,10 +71,30 @@ u32 DSimpleMesh::GetIndexCount() const {
 	return m_indexCount;
 }
 
+u32 DSimpleMesh::GetStartVertexLocation() const {
+	return m_startVertexLocation;
+}
+
+u32 DSimpleMesh::GetStartIndexLocation() const {
+	return m_startIndexLocation;
+}
 
 //
-DSimpleMesh::DSimpleMesh( DVertexBufferViewPtr vertices, DIndexBufferViewPtr indices, u32 indexCount )
+void DSimpleMesh::GetMaterial( DMaterialController::DMaterial ** pMaterial ) const {
+	assert( m_material );
+	
+	if( pMaterial )
+		*pMaterial = m_material.Get();
+}
+
+
+
+//
+DSimpleMesh::DSimpleMesh( DVertexBufferView *vertices, DIndexBufferView *indices, DMaterialController::DMaterial *material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation )
 	: m_vertices( vertices )
 	, m_indices( indices )
-	, m_indexCount( indexCount ) {
+	, m_material( material )
+	, m_indexCount( indexCount )
+	, m_startVertexLocation( startVertexLocation)
+	, m_startIndexLocation( startIndexLocation) {
 }

@@ -25,6 +25,8 @@ public:
 	DID3D11BufferPtr			CreateBuffer( u32 bufferSize, const void* bufferData, UINT bindFlags, HRESULT* returnCode );
 	DID3DBlobPtr				CreateBlob( u32 blobSize, HRESULT* returnCode );
 	DVertexBufferViewPtr		CreateVertexBufferView( DID3D11BufferPtr vertices, u32 stride, u32 offset );
+	DIndexBufferViewPtr			CreateIndexBufferView( DID3D11BufferPtr indexBufferPtr, DXGI_FORMAT format, u32 offset );
+	DSimpleMeshPtr				CreateSimpleMesh( DVertexBufferView *vertexView, DIndexBufferView *indexView, DMaterialController::DMaterial *material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation );
 
 	//
 	DID3D11DevicePtr			GetDevice() const {

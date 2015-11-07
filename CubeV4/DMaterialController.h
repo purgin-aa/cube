@@ -3,19 +3,28 @@
 #include "DIntrusivePtr.h"
 #include "DSharedObject.h"
 
-class DRenderContextPtr;
+class DRenderContext;
 
-class DMaterialController : DSharedObject {
+class DMaterialController : public DSharedObject {
 public:
 	//
 	class DMaterial : public DSharedObject {
 	public:
+		explicit DMaterial( DMaterialController *controller );
+
 		virtual ~DMaterial() {}
+
+		void GetMaterialController( DMaterialController **pController );
+	protected:
+		DIntrusivePtr<DMaterialController> m_controller;
 	};
 
 	virtual ~DMaterialController() {};
 
-	virtual void PrepareContext( DRenderContextPtr ) = 0;
-	virtual void FreeContext( DRenderContextPtr ) = 0;
-	virtual void BindMaterial( DIntrusivePtr< DMaterial > ) = 0;
+	virtual void PrepareContext( DRenderContext * ) = 0;
+	virtual void FreeContext( DRenderContext * ) = 0;
+	virtual void BindMaterial( DRenderContext *, DMaterial * ) = 0;
 };
+
+using DMaterialControllerPtr = DIntrusivePtr<DMaterialController>;
+using DMaterialPtr = DIntrusivePtr<DMaterialController::DMaterial>;

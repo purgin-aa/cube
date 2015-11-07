@@ -173,6 +173,7 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 	LM_CHECKRESULT( hr, returnCode, nullptr );
 
 	DWindowRenderContextPtr context( new DWindowRenderContext( manager, swapChain, backBufferView, config ) );
+	
 	return context;
 
 #undef LM_CHECKRESULT

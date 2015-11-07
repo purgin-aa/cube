@@ -5,7 +5,10 @@
 #include "DSharedObject.h"
 #include "DTools.h"
 
+#include "DMaterialController.h"
+
 class DRenderResourceManager;
+
 
 class DVertexBufferView;
 class DIndexBufferView;
@@ -59,21 +62,26 @@ protected:
 
 
 //
-class DSimpleMesh : DSharedObject {
+class DSimpleMesh : public DSharedObject {
 public:
 	//
-	DVertexBufferViewPtr	GetVertices() const;
-	DIndexBufferViewPtr		GetIndices() const;
-	u32						GetIndexCount() const;
-
+	DVertexBufferViewPtr		GetVertices() const;
+	DIndexBufferViewPtr			GetIndices() const;
+	u32							GetIndexCount() const;
+	u32							GetStartVertexLocation() const;
+	u32							GetStartIndexLocation() const;
+	void						GetMaterial( DMaterialController::DMaterial **pMaterial ) const;
 private:
 	//
-	DVertexBufferViewPtr	m_vertices;
-	DIndexBufferViewPtr		m_indices;
-	u32						m_indexCount;
+	DVertexBufferViewPtr		m_vertices;
+	DIndexBufferViewPtr			m_indices;
+	DMaterialPtr				m_material;
+	u32							m_indexCount;
+	u32							m_startVertexLocation;
+	u32							m_startIndexLocation;
 
 protected:
 	//
 	friend DRenderResourceManager;
-	explicit DSimpleMesh( DVertexBufferViewPtr vertices, DIndexBufferViewPtr indices, u32 indexCount );
+	explicit DSimpleMesh( DVertexBufferView *vertices, DIndexBufferView *indices, DMaterialController::DMaterial *material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation );
 };

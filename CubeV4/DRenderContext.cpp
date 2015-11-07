@@ -2,16 +2,55 @@
 #include "DRenderContext.h"
 
 //
-void DRenderContext::SetVertexShader( DID3D11VertexShaderPtr vertexShader ) {
+void DRenderContext::SetVertexShader( ID3D11VertexShader *vertexShader ) {
 	assert( m_deviceContext );
-	m_deviceContext->VSSetShader( vertexShader.Get(), nullptr, 0 );
+	m_deviceContext->VSSetShader( vertexShader, nullptr, 0 );
 }
 
 
 //
-void DRenderContext::SetPixelShader( DID3D11PixelShaderPtr pixelShader ) {
+void DRenderContext::SetPixelShader( ID3D11PixelShader *pixelShader ) {
 	assert( m_deviceContext );
-	m_deviceContext->PSSetShader( pixelShader.Get(), nullptr, 0 );
+	m_deviceContext->PSSetShader( pixelShader, nullptr, 0 );
+}
+
+void DRenderContext::SetInputLayout( ID3D11InputLayout * inputLayout ) {
+	assert( m_deviceContext );
+	m_deviceContext->IASetInputLayout( inputLayout );
+}
+
+void DRenderContext::SetPixelShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer ) {
+	assert( m_deviceContext );
+	
+	m_deviceContext->PSSetConstantBuffers( slot, 1, &buffer );
+}
+
+void DRenderContext::SetVertexShaderConstantBuffer( UINT slot, ID3D11Buffer * buffer ) {
+	assert( m_deviceContext );
+
+	m_deviceContext->VSSetConstantBuffers( slot, 1, &buffer );
+}
+
+void DRenderContext::SetVertexBuffer( UINT slot, ID3D11Buffer * vertexBuffer, u32 stride, u32 offset ) {
+	assert( vertexBuffer );
+	assert( stride );
+	assert( m_deviceContext );
+
+	m_deviceContext->IASetVertexBuffers(
+		slot,
+		1,
+		&vertexBuffer,
+		&stride,
+		&offset );
+}
+
+void DRenderContext::SetIndexBuffer( ID3D11Buffer * indexBuffer, DXGI_FORMAT format, u32 offset ) {
+	assert( indexBuffer );
+	
+	m_deviceContext->IASetIndexBuffer(
+		indexBuffer,
+		format,
+		offset );
 }
 
 
@@ -45,13 +84,31 @@ void DRenderContext::SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarge
 
 	m_renderTargetSize = size;
 	m_renderTarget = renderTarget;
-	m_deviceContext->OMSetRenderTargets( 0, &renderTarget, nullptr );
+	m_deviceContext->OMSetRenderTargets( 1, &renderTarget, nullptr );
+
+	D3D11_VIEWPORT viewport;
+	viewport.Width = static_cast< f32 >( size.width );
+	viewport.Height = static_cast< f32 >( size.height );
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+
+	m_deviceContext->RSSetViewports( 1, &viewport );
+}
+
+const DRenderTargetSize & DRenderContext::GetRenderTargetSize() const {
+	return m_renderTargetSize;
 }
 
 
 //
 DID3D11DeviceContextPtr DRenderContext::GetDeviceContext() const {
 	return m_deviceContext;
+}
+
+DRenderResourceManagerPtr DRenderContext::GetResourceManager() const {
+	return m_manager;
 }
 
 
