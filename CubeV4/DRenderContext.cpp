@@ -19,18 +19,28 @@ void DRenderContext::SetInputLayout( ID3D11InputLayout * inputLayout ) {
 	m_deviceContext->IASetInputLayout( inputLayout );
 }
 
+//
 void DRenderContext::SetPixelShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer ) {
 	assert( m_deviceContext );
 	
 	m_deviceContext->PSSetConstantBuffers( slot, 1, &buffer );
 }
 
+//
 void DRenderContext::SetVertexShaderConstantBuffer( UINT slot, ID3D11Buffer * buffer ) {
 	assert( m_deviceContext );
 
 	m_deviceContext->VSSetConstantBuffers( slot, 1, &buffer );
 }
 
+//
+void DRenderContext::SetPixelShaderResourceView( UINT slot, ID3D11ShaderResourceView * resourceView ) {
+	assert( m_deviceContext );
+
+	m_deviceContext->PSSetShaderResources( slot, 1, &resourceView );
+}
+
+//
 void DRenderContext::SetVertexBuffer( UINT slot, ID3D11Buffer * vertexBuffer, u32 stride, u32 offset ) {
 	assert( vertexBuffer );
 	assert( stride );
@@ -100,6 +110,13 @@ void DRenderContext::SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarge
 const DRenderTargetSize & DRenderContext::GetRenderTargetSize() const {
 	return m_renderTargetSize;
 }
+
+void DRenderContext::SetSamplers( UINT slot, ID3D11SamplerState * sampler ) {
+	assert( m_deviceContext );
+
+	m_deviceContext->PSSetSamplers( slot, 1, &sampler );
+}
+
 
 
 //

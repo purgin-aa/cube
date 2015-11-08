@@ -23,6 +23,9 @@ public:
 	void						SetPixelShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer );
 	void						SetVertexShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer );
 
+	// resource view
+	void						SetPixelShaderResourceView( UINT slot, ID3D11ShaderResourceView *resourceView );
+
 	// vertices, indices
 	void						SetVertexBuffer( UINT slot, ID3D11Buffer *vertexBuffer, u32 stride, u32 offset );
 	void						SetIndexBuffer( ID3D11Buffer *indexBuffer, DXGI_FORMAT format, u32 offset );
@@ -36,6 +39,8 @@ public:
 
 	void						SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarget, const DRenderTargetSize &size );
 	const DRenderTargetSize&	GetRenderTargetSize() const;
+
+	void						SetSamplers( UINT slot, ID3D11SamplerState *sampler );
 
 	DID3D11DeviceContextPtr		GetDeviceContext() const;
 	DRenderResourceManagerPtr	GetResourceManager() const;

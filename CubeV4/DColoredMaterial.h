@@ -7,10 +7,11 @@
 
 using namespace DirectX;
 
+//
 class DColoredMaterialController;
-
 using DColoredMaterialControllerPtr = DIntrusivePtr<DColoredMaterialController>;
 
+//
 const char *const DVERTEX_SHADER_COLORED_FILE_PATH = "VertexShader.Colored.vs";
 const char *const DPIXEL_SHADER_COLORED_FILE_PATH = "PixelShader.Colored.ps";
 

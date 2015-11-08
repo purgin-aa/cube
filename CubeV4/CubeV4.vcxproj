@@ -152,6 +152,8 @@
     <ClCompile Include="DRenderBasicTypes.cpp" />
     <ClCompile Include="DRenderContext.cpp" />
     <ClCompile Include="DRenderResourceManager.cpp" />
+    <ClCompile Include="DTexturedCube.cpp" />
+    <ClCompile Include="DTexturedMaterial.cpp" />
     <ClCompile Include="DWindowRenderContext.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Precompiled.cpp">
@@ -174,6 +176,9 @@
     <ClInclude Include="DRenderContext.h" />
     <ClInclude Include="DRenderResourceManager.h" />
     <ClInclude Include="DSharedObject.h" />
+    <ClInclude Include="DSimpleTexture.h" />
+    <ClInclude Include="DTexturedCube.h" />
+    <ClInclude Include="DTexturedMaterial.h" />
     <ClInclude Include="DTools.h" />
     <ClInclude Include="DWindowRenderContext.h" />
     <ClInclude Include="Precompiled.h" />

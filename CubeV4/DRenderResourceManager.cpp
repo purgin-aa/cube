@@ -44,7 +44,7 @@ DID3D11PixelShaderPtr DRenderResourceManager::CreatePixelShaderFromBlob( DID3DBl
 
 	DID3D11PixelShaderPtr pixelShader;
 	HRESULT hr = m_device->CreatePixelShader( 
-		 shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(),	nullptr, &pixelShader );
+		 shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &pixelShader );
 
 	if( returnCode )
 		*returnCode = hr;
@@ -116,6 +116,134 @@ DSimpleMeshPtr DRenderResourceManager::CreateSimpleMesh( DVertexBufferView *vert
 
 	DSimpleMeshPtr mesh( new DSimpleMesh( vertexView, indexView, material, indexCount, startVertexLocation, startIndexLocation ) );
 	return mesh;
+}
+
+//
+DID3D11Texture2DPtr DRenderResourceManager::CreateTexture2D( const DPixelColor * pixels, u16 width, u16 height, HRESULT * returnCode ) {
+	assert( pixels );
+	assert( m_device );
+
+	D3D11_TEXTURE2D_DESC textureDesc;
+	DTools::MemZero( textureDesc );
+
+	textureDesc.Width = static_cast< UINT > ( width );
+	textureDesc.Height = static_cast< UINT > ( height );
+	textureDesc.MipLevels = textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = 0;
+	textureDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA textureData;
+	DTools::MemZero( textureData );
+
+	textureData.SysMemPitch = width * sizeof( DPixelColor );
+	textureData.pSysMem = pixels;
+
+	DID3D11Texture2DPtr texture;
+	HRESULT hr = S_OK;
+
+	hr = m_device->CreateTexture2D(
+		&textureDesc,
+		&textureData,
+		&texture );
+
+	if( FAILED( hr ) )
+	{
+		if( returnCode )
+			*returnCode = hr;
+		return nullptr;
+	}
+
+	return texture;
+}
+
+
+//
+DID3D11ShaderResourceViewPtr DRenderResourceManager::CreateTexture2DView( ID3D11Texture2D * texture, HRESULT *returnCode ) {
+	assert( m_device );
+	assert( texture );
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+	DTools::MemZero( viewDesc );
+
+	viewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	viewDesc.Texture2D.MipLevels = 1;
+
+	DID3D11ShaderResourceViewPtr textureView;
+	HRESULT hr = S_OK;
+
+	hr = m_device->CreateShaderResourceView(
+		texture,
+		&viewDesc,
+		&textureView );
+
+	if( FAILED( hr ) )
+	{
+		if( returnCode )
+			*returnCode = hr;
+		return nullptr;
+	}
+
+	return textureView;
+}
+
+//
+DID3D11InputLayoutPtr DRenderResourceManager::CreateInputLayoutFromVertexShaderBlob( ID3DBlob * vertexShaderBlob, const D3D11_INPUT_ELEMENT_DESC * layout, u16 numLayouts, HRESULT * returnCode ) {
+	assert( m_device );
+	assert( vertexShaderBlob );
+	assert( layout );
+	assert( numLayouts );
+
+	DID3D11InputLayoutPtr inputLayout;
+	HRESULT hr = S_OK;
+
+	hr = m_device->CreateInputLayout(
+		layout,
+		numLayouts,
+		vertexShaderBlob->GetBufferPointer(),
+		vertexShaderBlob->GetBufferSize(),
+		&inputLayout );
+
+	if( FAILED( hr ) )
+	{
+		if( returnCode )
+			*returnCode = hr;
+		return nullptr;
+	}
+
+	return inputLayout;
+}
+
+DID3D11SamplerStatePtr DRenderResourceManager::CreateSampler( HRESULT * returnCode ) {
+	assert( m_device );
+	D3D11_SAMPLER_DESC samplerDesc;
+	DTools::MemZero( samplerDesc );
+	
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.MinLOD = 0.0f;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	DID3D11SamplerStatePtr sampler;
+	HRESULT hr = m_device->CreateSamplerState(
+		&samplerDesc,
+		&sampler );
+
+	if( FAILED( hr ) )
+	{
+		if( returnCode )
+			*returnCode = hr;
+		return nullptr;
+	}
+
+	return sampler;
 }
 
 

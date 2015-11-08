@@ -20,6 +20,8 @@ void DColoredMaterialController::FreeContext( DRenderContext *context ) {
 	context->SetVertexShader( nullptr );
 	context->SetPixelShader( nullptr );
 	context->SetInputLayout( nullptr );
+
+	context->SetPixelShaderConstantBuffer( 0, nullptr );
 }
 
 //

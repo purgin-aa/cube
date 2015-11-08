@@ -85,3 +85,16 @@ protected:
 	friend DRenderResourceManager;
 	explicit DSimpleMesh( DVertexBufferView *vertices, DIndexBufferView *indices, DMaterialController::DMaterial *material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation );
 };
+
+
+//
+union DPixelColor {
+	u8 chanels[ 4 ];
+	struct {
+		u8 r;
+		u8 g;
+		u8 b;
+		u8 a;
+	} rgba;
+	u32 color;
+};

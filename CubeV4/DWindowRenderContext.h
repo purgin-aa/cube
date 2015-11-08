@@ -22,14 +22,14 @@ using DWindowRenderContextPtr = DIntrusivePtr< DWindowRenderContext >;
 class DWindowRenderContext : public DRenderContext {
 public:
 	//
-	static DWindowRenderContextPtr Create( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode );
+	static DWindowRenderContextPtr	Create( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode );
 	//
 	~DWindowRenderContext();
 
-	void Present();
-	void SetFullscreenState( bool enable );
+	void							Present();
+	void							SetFullscreenState( bool enable );
 
-	DID3D11RenderTargetViewPtr GetBackBufferView() const;
+	DID3D11RenderTargetViewPtr		GetBackBufferView() const;
 
 private:
 	//

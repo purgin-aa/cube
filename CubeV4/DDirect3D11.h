@@ -16,6 +16,7 @@ using DID3DBlobPtr = DIntrusivePtr< ID3DBlob >;
 using DID3D11Texture2DPtr = DIntrusivePtr< ID3D11Texture2D >;
 using DID3D11InputLayoutPtr = DIntrusivePtr < ID3D11InputLayout >;
 
+using DID3D11ShaderResourceViewPtr = DIntrusivePtr< ID3D11ShaderResourceView >;
 
 // DXGI
 // SwapChain
