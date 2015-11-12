@@ -152,6 +152,7 @@
     <ClCompile Include="DRenderBasicTypes.cpp" />
     <ClCompile Include="DRenderContext.cpp" />
     <ClCompile Include="DRenderResourceManager.cpp" />
+    <ClCompile Include="DSphericalCamera.cpp" />
     <ClCompile Include="DTexturedCube.cpp" />
     <ClCompile Include="DTexturedMaterial.cpp" />
     <ClCompile Include="DWindowRenderContext.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="DRenderResourceManager.h" />
     <ClInclude Include="DSharedObject.h" />
     <ClInclude Include="DSimpleTexture.h" />
+    <ClInclude Include="DSphericalCamera.h" />
     <ClInclude Include="DTexturedCube.h" />
     <ClInclude Include="DTexturedMaterial.h" />
     <ClInclude Include="DTools.h" />
