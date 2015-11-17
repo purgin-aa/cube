@@ -8,11 +8,32 @@
 #include "DTexturedCube.h"
 #include "DSimpleTexture.h"
 #include "DSphericalCamera.h"
+#include "DLog.h"
+#include "DConsoleOutput.h"
+
+//
+void InitLog() {
+	DIOSys::OutputConsole *console = new DIOSys::OutputConsole( INVALID_HANDLE_VALUE, true );
+	DLog::SetDebugOutputDevice( console );
+	DLog::SetErrorOutputDevice( console );
+	DLog::SetInfoOutputDevice( console );
+	DLog::SetWarningOutputDevice( console );
+}
 
 //
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
-	const u16 windowWidth = 1366u;
-	const u16 windowHeight = 768u;
+	InitLog();
+	DLog::Info( "DSimpleDx11 application\n" );
+	auto pauseGuard = DMakeScopeGuard( [&]() {
+		std::system( "pause" );
+	} );
+
+	const u16 windowWidth = 1600u;
+	const u16 windowHeight = 900u;
+	const DXGI_RATIONAL refreshRate = { 
+		60u, 
+		1u 
+	};
 
 	SDL_Window* window = nullptr;
 
@@ -26,8 +47,10 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 		windowWidth, windowHeight, 
 		SDL_WINDOW_SHOWN );
-	if( !window )
+	if( !window ) {
+		DLog::Error( "Failed to create window\n" );
 		return -1;
+	}
 
 	auto windowDestroyGuard = DMakeScopeGuard( [&]() { 
 		SDL_DestroyWindow( window ); 
@@ -36,35 +59,44 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	SDL_SysWMinfo info;
 	DTools::MemZero( info );
 	if( SDL_GetWindowWMInfo( window, &info ) == SDL_FALSE ) {
+		DLog::Error( "Failed to get window's info\n" );
 		return -1;
 	}
 
 	DWindowContextConfig windowContextConfig {
 		info.info.win.window, // window desc
-		{ 60u, 1u }, // rate 60/1
+		refreshRate, // rate 60/1
 		windowWidth, // backbuffer width
 		windowHeight, // backbuffer height
 		false // fullscreen?
 	};
 
 	DRenderResourceManagerPtr manager = DRenderResourceManager::Create( nullptr );
-	if( !manager )
+	if( !manager ) {
+		DLog::Error( "Failed to create resource manager\n" );
 		return -1;
+	}
 
 	HRESULT hr = S_OK;
 	DWindowRenderContextPtr windowContext = DWindowRenderContext::Create( manager, windowContextConfig, &hr );
-	if( !windowContext )
+	if( !windowContext ) {
+		DLog::Error( "Failed to create window's context\n" );
 		return -1;
+	}
 
 	DRenderPtr render = DRender::Create( windowContext.Get(), &hr );
-	if( !render )
+	if( !render ) {
+		DLog::Error( "Failed to create render\n" );
 		return -1;
+	}
 
 	// init sampler
 	DID3D11SamplerStatePtr sampler = manager->CreateSampler( &hr );
 
-	if( !sampler )
+	if( !sampler ) {
+		DLog::Error( "Failed to create sampler\n" );
 		return -1;
+	}
 
 	windowContext->SetSamplers( 0, sampler.Get() );
 
@@ -101,8 +133,10 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 
 	delete[] pixels;
 
-	if( !texturedCube )
+	if( !texturedCube ) {
+		DLog::Error( "Failed to create textured cube\n" );
 		return -1;
+	}
 
 	// Enable relative mode for mouse
 	SDL_SetRelativeMouseMode( SDL_TRUE );
@@ -191,6 +225,8 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 
 	windowContext = nullptr;
 	manager = nullptr;
+
+
 
 	return 0;
 }

@@ -54,59 +54,6 @@ DWindowRenderContext::DWindowRenderContext(
 }
 
 //
-static bool __check_displayMode( IDXGIAdapter2 *adapter, u16 width, u16 height, DXGI_RATIONAL refreshRate, HRESULT *returnCode ) {
-#define LM_CHECKRESULT( code, pcode, r ) if ( FAILED( code ) ) { if ( pcode ) *pcode = code; return r; }
-	assert( adapter );
-	
-	HRESULT hr = S_OK;
-
-	// Get output
-	DIntrusivePtr<IDXGIOutput> output;
-	hr = adapter->EnumOutputs( 0, &output );
-
-	LM_CHECKRESULT( hr, returnCode, false );
-
-	UINT numModes = 0;
-	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-	// Get numModes
-	hr = output->GetDisplayModeList(
-		format,
-		0,
-		&numModes,
-		nullptr );
-
-	LM_CHECKRESULT( hr, returnCode, false );
-
-	DXGI_MODE_DESC *displayModes = new DXGI_MODE_DESC[ numModes ];
-	
-	// get mode descs
-	output->GetDisplayModeList( 
-		format, 
-		0, 
-		&numModes, 
-		displayModes );
-
-	DXGI_MODE_DESC *current = displayModes;
-	DXGI_MODE_DESC *end = displayModes + numModes;
-
-	while ( current != end )
-	{
-		if ( ( current->Width == static_cast< UINT >( width ) ) &&
-			 ( current->Height == static_cast< UINT >( height ) ) &&
-			 ( current->RefreshRate.Numerator == refreshRate.Numerator ) &&
-			 ( current->RefreshRate.Denominator == refreshRate.Denominator ) )
-			break;
-		else ++current;
-	}
-	
-	delete[] displayModes;
-
-	return ( current != end ) ? true : false;
-#undef LM_CHECKRESULT
-}
-
-//
 DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr manager, const DWindowContextConfig& config, HRESULT* returnCode ) {
 #define LM_CHECKRESULT( code, pcode, r ) if ( FAILED( code ) ) { if ( pcode ) *pcode = code; return r; }
 
@@ -126,14 +73,19 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 	LM_CHECKRESULT( hr, returnCode, nullptr );
 
 	// check display mode
-	if ( !__check_displayMode(
+	if( !DCheckDisplayMode(
 		dxgiAdapter.Get(),
 		config.width,
 		config.height,
 		config.refreshRate,
-		returnCode ) )
+		returnCode ) ) {
+
+		DLog::Error( "Expected display mode {%ux%u : %u/%u} not supported\n", 
+					 config.width, config.height, 
+					 config.refreshRate.Numerator, 
+					 config.refreshRate.Denominator );
 		return nullptr;
-		
+	}
 	DIDXGIFactory2Ptr factory;
 	hr = dxgiAdapter->GetParent( __uuidof( IDXGIFactory2 ), ( void** )&factory );
 	LM_CHECKRESULT( hr, returnCode, nullptr );

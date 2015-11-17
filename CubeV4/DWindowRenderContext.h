@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DRenderContext.h"
+#include "DDirect3DTools.h"
 
 //
 struct DWindowContextConfig {
