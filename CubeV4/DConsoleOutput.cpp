@@ -20,7 +20,7 @@ DIOSys::OutputConsole::~OutputConsole() {
 void DIOSys::OutputConsole::Write( const void * buffer, std::size_t size ) {
 	assert( m_output != INVALID_HANDLE_VALUE );
 
-	DWORD numWriten = 0u;
+	DWORD numWriten = 0;
 
 	WriteConsoleA( m_output,
 				   buffer,

@@ -57,4 +57,4 @@ const u16 DCUBE_INDICES_TEXTURED[] = {
 	23,20,22
 };
 
-DSimpleMeshPtr DCreateTexturedCube( DRenderResourceManagerPtr manager, const DPixelColor *pixels, u16 width, u16 height, HRESULT *returnCode );
+DSimpleMeshPtr DCreateTexturedCube( DRenderResourceManagerPtr manager, const DPixelColor *pixels, u32 width, u32 height, HRESULT *returnCode );

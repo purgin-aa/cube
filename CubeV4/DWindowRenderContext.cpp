@@ -44,13 +44,8 @@ DWindowRenderContext::DWindowRenderContext(
 	assert( swapChain );
 	assert( backBufferView );
 	assert( ( config.width > 0 ) && ( config.height > 0 ) );
-
-	DRenderTargetSize size = {
-		config.width,
-		config.height
-	};
-
-	SetRenderTargetView( backBufferView, size );
+	
+	SetRenderTargetView( backBufferView, { config.width, config.height } );
 }
 
 //
@@ -59,7 +54,7 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 
 	assert( manager );
 	assert( config.currentWindow );
-	assert( ( config.width > 0u ) && ( config.height > 0u ) );
+	assert( ( config.width > 0 ) && ( config.height > 0u ) );
 
 	DID3D11DevicePtr device = manager->GetDevice();
 	assert( device );

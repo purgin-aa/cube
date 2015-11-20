@@ -23,8 +23,7 @@ DID3D11RenderTargetViewPtr DRenderResourceManager::CreateRenderTargetView( DID3D
 
 
 //
-DID3D11VertexShaderPtr DRenderResourceManager::CreateVertexShaderFromBlob( DID3DBlobPtr shaderBlob, HRESULT *returnCode ) {
-	assert( m_device );
+DID3D11VertexShaderPtr DRenderResourceManager::CreateVertexShaderFromBlob( DID3DBlobPtr shaderBlob, HRESULT* returnCode ) {
 	assert( shaderBlob );
 
 	DID3D11VertexShaderPtr vertexShader;
@@ -38,8 +37,7 @@ DID3D11VertexShaderPtr DRenderResourceManager::CreateVertexShaderFromBlob( DID3D
 
 
 //
-DID3D11PixelShaderPtr DRenderResourceManager::CreatePixelShaderFromBlob( DID3DBlobPtr shaderBlob, HRESULT *returnCode ) {
-	assert( m_device );
+DID3D11PixelShaderPtr DRenderResourceManager::CreatePixelShaderFromBlob( DID3DBlobPtr shaderBlob, HRESULT* returnCode ) {
 	assert( shaderBlob );
 
 	DID3D11PixelShaderPtr pixelShader;
@@ -101,25 +99,28 @@ DVertexBufferViewPtr DRenderResourceManager::CreateVertexBufferView( DID3D11Buff
 	return view;
 }
 
+
 //
 DIndexBufferViewPtr DRenderResourceManager::CreateIndexBufferView( DID3D11BufferPtr indexBufferPtr, DXGI_FORMAT format, u32 offset ) {
 	DIndexBufferViewPtr view( new DIndexBufferView( indexBufferPtr, format, offset ) );
 	return view;
 }
 
+
 //
-DSimpleMeshPtr DRenderResourceManager::CreateSimpleMesh( DVertexBufferView *vertexView, DIndexBufferView *indexView, DMaterialController::DMaterial *material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation ) {
+DSimpleMeshPtr DRenderResourceManager::CreateSimpleMesh( DVertexBufferView* vertexView, DIndexBufferView* indexView, DMaterialController::DMaterial* material, u32 indexCount, u32 startVertexLocation, u32 startIndexLocation ) {
 	assert( vertexView );
 	assert( indexView );
 	assert( material );
-	assert( indexCount > 0u );
+	assert( indexCount > 0 );
 
 	DSimpleMeshPtr mesh( new DSimpleMesh( vertexView, indexView, material, indexCount, startVertexLocation, startIndexLocation ) );
 	return mesh;
 }
 
+
 //
-DID3D11Texture2DPtr DRenderResourceManager::CreateTexture2D( const DPixelColor * pixels, u16 width, u16 height, HRESULT * returnCode ) {
+DID3D11Texture2DPtr DRenderResourceManager::CreateTexture2D( const DPixelColor* pixels, u32 width, u32 height, HRESULT* returnCode ) {
 	assert( pixels );
 	assert( m_device );
 
@@ -150,8 +151,7 @@ DID3D11Texture2DPtr DRenderResourceManager::CreateTexture2D( const DPixelColor *
 		&textureData,
 		&texture );
 
-	if( FAILED( hr ) )
-	{
+	if( FAILED( hr ) ) {
 		if( returnCode )
 			*returnCode = hr;
 		return nullptr;
@@ -162,8 +162,7 @@ DID3D11Texture2DPtr DRenderResourceManager::CreateTexture2D( const DPixelColor *
 
 
 //
-DID3D11ShaderResourceViewPtr DRenderResourceManager::CreateTexture2DView( ID3D11Texture2D * texture, HRESULT *returnCode ) {
-	assert( m_device );
+DID3D11ShaderResourceViewPtr DRenderResourceManager::CreateTexture2DView( ID3D11Texture2D* texture, HRESULT* returnCode ) {
 	assert( texture );
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
@@ -181,8 +180,7 @@ DID3D11ShaderResourceViewPtr DRenderResourceManager::CreateTexture2DView( ID3D11
 		&viewDesc,
 		&textureView );
 
-	if( FAILED( hr ) )
-	{
+	if( FAILED( hr ) ) {
 		if( returnCode )
 			*returnCode = hr;
 		return nullptr;
@@ -192,8 +190,7 @@ DID3D11ShaderResourceViewPtr DRenderResourceManager::CreateTexture2DView( ID3D11
 }
 
 //
-DID3D11InputLayoutPtr DRenderResourceManager::CreateInputLayoutFromVertexShaderBlob( ID3DBlob * vertexShaderBlob, const D3D11_INPUT_ELEMENT_DESC * layout, u16 numLayouts, HRESULT * returnCode ) {
-	assert( m_device );
+DID3D11InputLayoutPtr DRenderResourceManager::CreateInputLayoutFromVertexShaderBlob( ID3DBlob* vertexShaderBlob, const D3D11_INPUT_ELEMENT_DESC* layout, u16 numLayouts, HRESULT* returnCode ) {
 	assert( vertexShaderBlob );
 	assert( layout );
 	assert( numLayouts );
@@ -218,8 +215,9 @@ DID3D11InputLayoutPtr DRenderResourceManager::CreateInputLayoutFromVertexShaderB
 	return inputLayout;
 }
 
-DID3D11SamplerStatePtr DRenderResourceManager::CreateSampler( HRESULT * returnCode ) {
-	assert( m_device );
+
+//
+DID3D11SamplerStatePtr DRenderResourceManager::CreateSampler( HRESULT* returnCode ) {
 	D3D11_SAMPLER_DESC samplerDesc;
 	DTools::MemZero( samplerDesc );
 	
@@ -232,12 +230,8 @@ DID3D11SamplerStatePtr DRenderResourceManager::CreateSampler( HRESULT * returnCo
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	DID3D11SamplerStatePtr sampler;
-	HRESULT hr = m_device->CreateSamplerState(
-		&samplerDesc,
-		&sampler );
-
-	if( FAILED( hr ) )
-	{
+	HRESULT hr = m_device->CreateSamplerState( &samplerDesc, &sampler );
+	if( FAILED( hr ) ) {
 		if( returnCode )
 			*returnCode = hr;
 		return nullptr;

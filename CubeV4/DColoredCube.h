@@ -36,4 +36,5 @@ const u16 DCUBE_INDICES_COLORED[] = {
 	7,4,6
 };
 
-DSimpleMeshPtr DCreateColoredCube( DRenderResourceManagerPtr manager, const XMFLOAT4 &color, HRESULT *returnCode );
+
+DSimpleMeshPtr DCreateColoredCube( DRenderResourceManagerPtr manager, const XMFLOAT4& color, HRESULT* returnCode );

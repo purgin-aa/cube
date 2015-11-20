@@ -7,28 +7,29 @@
 
 //
 struct DRenderTargetSize {
-	u16 width;
-	u16 height;
+	u32 width;
+	u32 height;
 };
+
 
 //
 class DRenderContext : public DSharedObject {
 public:
 	// shaders
-	void						SetVertexShader( ID3D11VertexShader *vertexShader );
-	void						SetPixelShader( ID3D11PixelShader *pixelShader );
-	void						SetInputLayout( ID3D11InputLayout *inputLayout );
+	void						SetVertexShader( ID3D11VertexShader* vertexShader );
+	void						SetPixelShader( ID3D11PixelShader* pixelShader );
+	void						SetInputLayout( ID3D11InputLayout* inputLayout );
 
 	// constant buffers
-	void						SetPixelShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer );
-	void						SetVertexShaderConstantBuffer( UINT slot, ID3D11Buffer *buffer );
+	void						SetPixelShaderConstantBuffer( u32 slot, ID3D11Buffer* buffer );
+	void						SetVertexShaderConstantBuffer( u32 slot, ID3D11Buffer* buffer );
 
 	// resource view
-	void						SetPixelShaderResourceView( UINT slot, ID3D11ShaderResourceView *resourceView );
+	void						SetPixelShaderResourceView( u32 slot, ID3D11ShaderResourceView* resourceView );
 
 	// vertices, indices
-	void						SetVertexBuffer( UINT slot, ID3D11Buffer *vertexBuffer, u32 stride, u32 offset );
-	void						SetIndexBuffer( ID3D11Buffer *indexBuffer, DXGI_FORMAT format, u32 offset );
+	void						SetVertexBuffer( u32 slot, ID3D11Buffer* vertexBuffer, u32 stride, u32 offset );
+	void						SetIndexBuffer( ID3D11Buffer* indexBuffer, DXGI_FORMAT format, u32 offset );
 
 	//
 	void						SetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY topology );
@@ -40,7 +41,7 @@ public:
 	void						SetRenderTargetView( DID3D11RenderTargetViewPtr renderTarget, const DRenderTargetSize &size );
 	const DRenderTargetSize&	GetRenderTargetSize() const;
 
-	void						SetSamplers( UINT slot, ID3D11SamplerState *sampler );
+	void						SetSamplers( u32 slot, ID3D11SamplerState* sampler );
 
 	DID3D11DeviceContextPtr		GetDeviceContext() const;
 	DRenderResourceManagerPtr	GetResourceManager() const;
