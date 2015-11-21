@@ -2,8 +2,8 @@
 #include "DColoredMaterial.h"
 
 //
-const char* DVERTEX_SHADER_COLORED_FILE_PATH = "VertexShader.Colored.vs";
-const char* DPIXEL_SHADER_COLORED_FILE_PATH = "PixelShader.Colored.ps";
+const char* DVERTEX_SHADER_COLORED_FILE_PATH = "shaders\\VertexShader.Colored.vs";
+const char* DPIXEL_SHADER_COLORED_FILE_PATH = "shaders\\PixelShader.Colored.ps";
 
 //
 void DColoredMaterialController::PrepareContext( DRenderContext *context ) {

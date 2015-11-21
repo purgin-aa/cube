@@ -1,6 +1,9 @@
 #include "Precompiled.h"
 #include "DTexturedMaterial.h"
 
+//
+const char *const DVERTEX_SHADER_TEXTURED_FILE_PATH = "shaders\\VertexShader.Textured.vs";
+const char *const DPIXEL_SHADER_TEXTURED_FILE_PATH = "shaders\\PixelShader.Textured.ps";
 
 //
 void DTexturedMaterialController::PrepareContext( DRenderContext *context ) {

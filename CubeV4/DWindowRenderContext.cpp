@@ -43,9 +43,9 @@ DWindowRenderContext::DWindowRenderContext(
 	assert( manager );
 	assert( swapChain );
 	assert( backBufferView );
-	assert( ( config.width > 0 ) && ( config.height > 0 ) );
+	assert( ( config.displayMode.width > 0 ) && ( config.displayMode.height > 0 ) );
 	
-	SetRenderTargetView( backBufferView, { config.width, config.height } );
+	SetRenderTargetView( backBufferView, { config.displayMode.width, config.displayMode.height } );
 }
 
 //
@@ -54,7 +54,7 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 
 	assert( manager );
 	assert( config.currentWindow );
-	assert( ( config.width > 0 ) && ( config.height > 0u ) );
+	assert( ( config.displayMode.width > 0 ) && ( config.displayMode.height > 0u ) );
 
 	DID3D11DevicePtr device = manager->GetDevice();
 	assert( device );
@@ -67,20 +67,22 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 	hr = dxgiDevice->GetParent( __uuidof( IDXGIAdapter2 ), ( void** )&dxgiAdapter );
 	LM_CHECKRESULT( hr, returnCode, nullptr );
 
+	DWindowContextConfig supportedConfig = config;
+
 	// check display mode
 	if( !DCheckDisplayMode(
 		dxgiAdapter.Get(),
-		config.width,
-		config.height,
-		config.refreshRate,
+		&config.displayMode,
+		&supportedConfig.displayMode,
 		returnCode ) ) {
 
 		DLog::Error( "Expected display mode {%ux%u : %u/%u} not supported\n", 
-					 config.width, config.height, 
-					 config.refreshRate.Numerator, 
-					 config.refreshRate.Denominator );
+					 config.displayMode.width, config.displayMode.height, 
+					 config.displayMode.refreshRate.Numerator, 
+					 config.displayMode.refreshRate.Denominator );
 		return nullptr;
 	}
+	
 	DIDXGIFactory2Ptr factory;
 	hr = dxgiAdapter->GetParent( __uuidof( IDXGIFactory2 ), ( void** )&factory );
 	LM_CHECKRESULT( hr, returnCode, nullptr );
@@ -90,8 +92,8 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 
 	DXGI_SWAP_CHAIN_DESC1 chainDesc;
 	DTools::MemZero( chainDesc );
-	chainDesc.Width = config.width;
-	chainDesc.Height = config.height;
+	chainDesc.Width = supportedConfig.displayMode.width;
+	chainDesc.Height = supportedConfig.displayMode.height;
 	chainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	chainDesc.SampleDesc.Count = 1;
 	chainDesc.SampleDesc.Quality = 0;
@@ -101,7 +103,7 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreenDesc;
 	DTools::MemZero( fullscreenDesc );
-	fullscreenDesc.RefreshRate = config.refreshRate;
+	fullscreenDesc.RefreshRate = supportedConfig.displayMode.refreshRate;
 	fullscreenDesc.Windowed = !config.fullscreen;
 
 	hr = factory->CreateSwapChainForHwnd( 
@@ -116,10 +118,10 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 	DID3D11Texture2DPtr backBuffer;
 	swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( void** )&backBuffer );
 
-	DID3D11RenderTargetViewPtr backBufferView = manager->CreateRenderTargetView( backBuffer, 	&hr );
+	DID3D11RenderTargetViewPtr backBufferView = manager->CreateRenderTargetView( backBuffer, &hr );
 	LM_CHECKRESULT( hr, returnCode, nullptr );
 
-	DWindowRenderContextPtr context( new DWindowRenderContext( manager, swapChain, backBufferView, config ) );
+	DWindowRenderContextPtr context( new DWindowRenderContext( manager, swapChain, backBufferView, supportedConfig ) );
 	
 	return context;
 

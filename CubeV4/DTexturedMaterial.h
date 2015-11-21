@@ -13,9 +13,6 @@ using namespace DirectX;
 class DTexturedMaterialController;
 using DTexturedMaterialControllerPtr = DIntrusivePtr< DTexturedMaterialController >;
 
-//
-const char *const DVERTEX_SHADER_TEXTURED_FILE_PATH = "VertexShader.Textured.vs";
-const char *const DPIXEL_SHADER_TEXTURED_FILE_PATH = "PixelShader.Textured.ps";
 
 //
 class DTexturedMaterialController : public DMaterialController {

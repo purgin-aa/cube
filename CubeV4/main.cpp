@@ -22,7 +22,7 @@ void InitLog() {
 }
 
 
-//
+//		
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	InitLog();
 	DLog::Info( "DSimpleDx11 application\n" );
@@ -39,9 +39,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 
 	SDL_Window* window = nullptr;
 
-	if( SDL_Init( SDL_INIT_EVERYTHING ) != 0 )
+	if( SDL_Init( SDL_INIT_EVERYTHING ) != 0 ) {
+		DLog::Error( "Failed to init SDL: %s\n", SDL_GetError() );
 		return -1;
-
+	}
+		
 	auto sdlQuitGuard = DMakeScopeGuard( SDL_Quit );
 
 	window = SDL_CreateWindow( 
@@ -50,7 +52,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 		windowWidth, windowHeight, 
 		SDL_WINDOW_SHOWN );
 	if( !window ) {
-		DLog::Error( "Failed to create window\n" );
+		DLog::Error( "Failed to create window: %s\n", SDL_GetError() );
 		return -1;
 	}
 
@@ -61,41 +63,44 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	SDL_SysWMinfo info;
 	DTools::MemZero( info );
 	if( SDL_GetWindowWMInfo( window, &info ) == SDL_FALSE ) {
-		DLog::Error( "Failed to get window's info\n" );
+		DLog::Error( "Failed to get window's info: %s\n", SDL_GetError() );
 		return -1;
 	}
 
 	DWindowContextConfig windowContextConfig {
 		info.info.win.window, // window desc
-		refreshRate, // rate 60/1
-		windowWidth, // backbuffer width
-		windowHeight, // backbuffer height
+		{ // display mode
+			windowWidth, // backbuffer width
+			windowHeight, // backbuffer height
+			refreshRate
+		}, // 
 		false // fullscreen?
 	};
 
-	DRenderResourceManagerPtr manager = DRenderResourceManager::Create( nullptr );
+	HRESULT hr = S_OK;
+	DRenderResourceManagerPtr manager = DRenderResourceManager::Create( &hr );
 	if( !manager ) {
-		DLog::Error( "Failed to create resource manager\n" );
+		DLog::Error( "Failed to create resource manager: %lX\n", hr );
 		return -1;
 	}
 
-	HRESULT hr = S_OK;
+
 	DWindowRenderContextPtr windowContext = DWindowRenderContext::Create( manager, windowContextConfig, &hr );
 	if( !windowContext ) {
-		DLog::Error( "Failed to create window's context\n" );
+		DLog::Error( "Failed to create window's context: %lX\n", hr );
 		return -1;
 	}
 
 	DRenderPtr render = DRender::Create( windowContext.Get(), &hr );
 	if( !render ) {
-		DLog::Error( "Failed to create render\n" );
+		DLog::Error( "Failed to create render: %lX\n", hr );
 		return -1;
 	}
 
 	// init sampler
 	DID3D11SamplerStatePtr sampler = manager->CreateSampler( &hr );
 	if( !sampler ) {
-		DLog::Error( "Failed to create sampler\n" );
+		DLog::Error( "Failed to create sampler: %lX\n", hr );
 		return -1;
 	}
 
@@ -134,7 +139,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	delete[] pixels;
 
 	if( !texturedCube ) {
-		DLog::Error( "Failed to create textured cube\n" );
+		DLog::Error( "Failed to create textured cube: %lX\n", hr );
 		return -1;
 	}
 

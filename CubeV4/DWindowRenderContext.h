@@ -6,9 +6,7 @@
 //
 struct DWindowContextConfig {
 	HWND			currentWindow;
-	DXGI_RATIONAL	refreshRate;
-	u32				width;
-	u32				height;
+	DDisplayMode	displayMode;
 	bool			fullscreen;
 	// todo quality
 };
