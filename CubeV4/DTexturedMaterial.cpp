@@ -43,8 +43,8 @@ void DTexturedMaterialController::BindMaterial( DRenderContext *context, DMateri
 DIntrusivePtr<DTexturedMaterialController::DTexturedMaterial> DTexturedMaterialController::CreateTexturedMaterial( DRenderResourceManager * manager, const PixelColor *pixels, u16 width, u16 height, HRESULT *returnCode ) {
 	assert( manager );
 	assert( pixels );
-	assert( width > 0u );
-	assert( height > 0u );
+	assert( width > 0 );
+	assert( height > 0 );
 
 	auto texture =
 		manager->CreateTexture2D(
@@ -69,7 +69,7 @@ DIntrusivePtr<DTexturedMaterialController::DTexturedMaterial> DTexturedMaterialC
 
 
 //
-DTexturedMaterialControllerPtr DTexturedMaterialController::Create( DRenderResourceManager * manager, HRESULT * returnCode ) {
+DTexturedMaterialControllerPtr DTexturedMaterialController::Create( DRenderResourceManager* manager, HRESULT* returnCode ) {
 	assert( manager );
 
 	// load files

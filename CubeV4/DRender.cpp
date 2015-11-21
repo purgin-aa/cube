@@ -59,7 +59,7 @@ void DRender::SetPerspectiveProjectionMode( const struct DRenderPerspectiveModeD
 	
 	const DRenderTargetSize &targetSize = m_context->GetRenderTargetSize();
 	
-	assert( ( targetSize.width > 0u ) && ( targetSize.height > 0u ) );
+	assert( ( targetSize.width > 0 ) && ( targetSize.height > 0 ) );
 
 	const f32 aspectRatio = static_cast< f32 >( targetSize.width ) / static_cast< f32 >( targetSize.height );
 	

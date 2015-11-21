@@ -1,7 +1,9 @@
 #include "Precompiled.h"
 #include "DDirect3DTools.h"
 
-DID3DBlobPtr DCompileShaderFromSourceBlob( DID3DBlobPtr sourceBlob, const char * entryPoint, const char * target, HRESULT * returnCode ) {
+
+//
+DID3DBlobPtr DCompileShaderFromSourceBlob( DID3DBlobPtr sourceBlob, const char* entryPoint, const char* target, HRESULT* returnCode ) {
 	assert( sourceBlob );
 	assert( target );
 	// if entry point is null - entry point is "main"
@@ -9,7 +11,10 @@ DID3DBlobPtr DCompileShaderFromSourceBlob( DID3DBlobPtr sourceBlob, const char *
 	DID3DBlobPtr shaderBlob;
 	DID3DBlobPtr errorBlob;
 
-	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+	u32 compileFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#ifdef _DEBUG
+	compileFlags |= D3DCOMPILE_DEBUG;
+#endif
 
 	HRESULT hr = D3DCompile(
 		sourceBlob->GetBufferPointer(),
@@ -24,10 +29,8 @@ DID3DBlobPtr DCompileShaderFromSourceBlob( DID3DBlobPtr sourceBlob, const char *
 		&shaderBlob,
 		&errorBlob );
 
-	if( FAILED( hr ) )
-	{
-		if( errorBlob )
-		{
+	if( FAILED( hr ) ) {
+		if( errorBlob ) {
 			DLog::Error( "Shader compile error: %s\n", errorBlob->GetBufferPointer() );
 		}
 
@@ -40,42 +43,33 @@ DID3DBlobPtr DCompileShaderFromSourceBlob( DID3DBlobPtr sourceBlob, const char *
 	return shaderBlob;
 }
 
+
 //
-bool DCheckDisplayMode( IDXGIAdapter2 * adapter, u16 width, u16 height, DXGI_RATIONAL refreshRate, HRESULT * returnCode ) {
+bool DCheckDisplayMode( IDXGIAdapter2* adapter, u32 width, u32 height, DXGI_RATIONAL refreshRate, HRESULT* returnCode ) {
 #define LM_CHECKRESULT( code, pcode, r ) if ( FAILED( code ) ) { if ( pcode ) *pcode = code; return r; }
 	assert( adapter );
 
-	HRESULT hr = S_OK;
-
-	// Get output
+	// get output
 	DIntrusivePtr<IDXGIOutput> output;
-	hr = adapter->EnumOutputs( 0, &output );
-
+	HRESULT hr = adapter->EnumOutputs( 0, &output );
 	LM_CHECKRESULT( hr, returnCode, false );
 
-	UINT numModes = 0;
+	const u32 MaxModes = 128;
+	u32 numModes = 0;
 	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	// Get numModes
-	hr = output->GetDisplayModeList(
-		format,
-		0,
-		&numModes,
-		nullptr );
-
+	// get numModes
+	hr = output->GetDisplayModeList( format, 0, &numModes, nullptr );
 	LM_CHECKRESULT( hr, returnCode, false );
-
-	DXGI_MODE_DESC *displayModes = new DXGI_MODE_DESC[ numModes ];
+	if( numModes > MaxModes )
+		numModes = MaxModes;
+	DXGI_MODE_DESC displayModes[MaxModes];
 
 	// get mode descs
-	output->GetDisplayModeList(
-		format,
-		0,
-		&numModes,
-		displayModes );
+	output->GetDisplayModeList( format, 0, &numModes, displayModes );
 
-	DXGI_MODE_DESC *current = displayModes;
-	DXGI_MODE_DESC *end = displayModes + numModes;
+	DXGI_MODE_DESC* current = displayModes;
+	DXGI_MODE_DESC* end = displayModes + numModes;
 
 	while( current != end ) {
 		DLog::Info( 
@@ -87,18 +81,23 @@ bool DCheckDisplayMode( IDXGIAdapter2 * adapter, u16 width, u16 height, DXGI_RAT
 	}
 	current = displayModes;
 
-	while( current != end )
-	{
-		if( ( current->Width == static_cast< UINT >( width ) ) &&
-			( current->Height == static_cast< UINT >( height ) ) &&
-			( current->RefreshRate.Numerator == refreshRate.Numerator ) &&
-			( current->RefreshRate.Denominator == refreshRate.Denominator ) )
-			break;
-		else ++current;
+	//
+	// WARNING: this check is plain wrong, we can't compare float numbers reliably
+	// but this is better than the original check which didn't work on my system at all
+	//
+	// better don't deal with refresh rates at all
+	//
+	const f32 TargetRate = refreshRate.Numerator / ( f32 )refreshRate.Denominator;
+	while( current != end )	{
+		if( current->Width == width && current->Height == height ) {
+			const f32 rate = current->RefreshRate.Numerator / ( f32 )current->RefreshRate.Denominator;
+			if( rate == TargetRate )
+				break;
+		}
+		
+		++current;
 	}
 
-	delete[] displayModes;
-
-	return ( current != end ) ? true : false;
+	return current != end;
 #undef LM_CHECKRESULT
 }

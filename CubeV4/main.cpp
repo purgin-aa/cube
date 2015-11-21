@@ -11,6 +11,7 @@
 #include "DLog.h"
 #include "DConsoleOutput.h"
 
+
 //
 void InitLog() {
 	DIOSys::OutputConsole *console = new DIOSys::OutputConsole( INVALID_HANDLE_VALUE, true );
@@ -20,6 +21,7 @@ void InitLog() {
 	DLog::SetWarningOutputDevice( console );
 }
 
+
 //
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	InitLog();
@@ -28,11 +30,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 		std::system( "pause" );
 	} );
 
-	const u16 windowWidth = 1600u;
-	const u16 windowHeight = 900u;
+	const u32 windowWidth = 1600;
+	const u32 windowHeight = 900;
 	const DXGI_RATIONAL refreshRate = { 
-		60u, 
-		1u 
+		60, 
+		1 
 	};
 
 	SDL_Window* window = nullptr;
@@ -92,7 +94,6 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 
 	// init sampler
 	DID3D11SamplerStatePtr sampler = manager->CreateSampler( &hr );
-
 	if( !sampler ) {
 		DLog::Error( "Failed to create sampler\n" );
 		return -1;
@@ -118,13 +119,12 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 	render->SetViewMatrix( camera.GetViewMatrix() );
 
 	// create textured cube mesh
-	const u16 textureWidth = 256u;
-	const u16 textureHeight = 256u;
-	DPixelColor *pixels = new DPixelColor[ textureWidth * textureHeight ];
+	const u32 textureWidth = 256;
+	const u32 textureHeight = 256;
+	DPixelColor* pixels = new DPixelColor[ textureWidth * textureHeight ];
 	DGenerateTexture( pixels, textureWidth, textureHeight );
 
-	DSimpleMeshPtr texturedCube =
-		DCreateTexturedCube(
+	DSimpleMeshPtr texturedCube = DCreateTexturedCube(
 			manager,
 			pixels,
 			textureWidth,

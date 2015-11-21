@@ -4,109 +4,121 @@
 #include <stdarg.h>
 
 
+using namespace DIOSys;
+
+
 // GlobalOutputs
-static DIntrusivePtr<DIOSys::IOutputDevice> __errorOutput;
-static DIntrusivePtr<DIOSys::IOutputDevice> __warningOutput;
-static DIntrusivePtr<DIOSys::IOutputDevice> __infoOutput;
-static DIntrusivePtr<DIOSys::IOutputDevice> __debugOutput;
+static DIntrusivePtr< IOutputDevice > errorOutput;
+static DIntrusivePtr< IOutputDevice > warningOutput;
+static DIntrusivePtr< IOutputDevice > infoOutput;
+static DIntrusivePtr< IOutputDevice > debugOutput;
 
 //
-static const std::size_t __MAX_BUFFER_LEN = 1024u;
+static const std::size_t MAX_BUFFER_LEN = 1024;
 
 /*
 	PRIVATE FUNCTION DEFINITION
 */
-static void __FormatToOutput( DIOSys::IOutputDevice *output, const char *str, va_list args );
-static void __PutStrToOutput( DIOSys::IOutputDevice *output, const char *str );
+static void FormatToOutput( IOutputDevice* output, const char* str, va_list args );
+static void PutStrToOutput( IOutputDevice* output, const char* str );
 
 
 /*
 	IMPLEMENTATION 
 */
-void DLog::Warning( const char * str, ... ) {
-	if( __warningOutput ) {
+void DLog::Warning( const char* str, ... ) {
+	if( warningOutput ) {
 		va_list	arguments;
 		va_start( arguments, str );
-		__PutStrToOutput( __warningOutput.Get(), "WARNING: " );
-		__FormatToOutput( __warningOutput.Get(), str, arguments );
+		PutStrToOutput( warningOutput.Get(), "WARNING: " );
+		FormatToOutput( warningOutput.Get(), str, arguments );
 	}
 }
 
+
 //
-void DLog::Error( const char * str, ... ) {
-	if( __errorOutput ) {
+void DLog::Error( const char* str, ... ) {
+	if( errorOutput ) {
 		va_list	arguments;
 		va_start( arguments, str );
-		__PutStrToOutput( __errorOutput.Get(), "ERROR: " );
-		__FormatToOutput( __errorOutput.Get(), str, arguments );
+		PutStrToOutput( errorOutput.Get(), "ERROR: " );
+		FormatToOutput( errorOutput.Get(), str, arguments );
 	}
 }
 
+
 //
-void DLog::Info( const char * str, ... ) {
-	if( __infoOutput ) {
+void DLog::Info( const char* str, ... ) {
+	if( infoOutput ) {
 		va_list	arguments;
 		va_start( arguments, str );
-		__PutStrToOutput( __infoOutput.Get(), "INFO: " );
-		__FormatToOutput( __infoOutput.Get(), str, arguments );
+		PutStrToOutput( infoOutput.Get(), "INFO: " );
+		FormatToOutput( infoOutput.Get(), str, arguments );
 	}
 }
 
+
 //
-void DLog::Debug( const char * str, ... ) {
+void DLog::Debug( const char* str, ... ) {
 #if defined( DEBUG ) || defined( _DEBUG )
-	if( __debugOutput ) {
+	if( debugOutput ) {
 		va_list	arguments;
 		va_start( arguments, str );
-		__PutStrToOutput( __debugOutput.Get(), "DEBUG: " );
-		__FormatToOutput( __debugOutput.Get(), str, arguments );
+		PutStrToOutput( debugOutput.Get(), "DEBUG: " );
+		FormatToOutput( debugOutput.Get(), str, arguments );
 	}
 #endif
 }
 
-//
-void DLog::SetErrorOutputDevice( DIOSys::IOutputDevice * output ) {
-	__errorOutput = output;
-}
 
 //
-void DLog::SetWarningOutputDevice( DIOSys::IOutputDevice * output ) {
-	__warningOutput = output;
-}
-
-//
-void DLog::SetInfoOutputDevice( DIOSys::IOutputDevice * output ) {
-	__infoOutput = output;
+void DLog::SetErrorOutputDevice( IOutputDevice* output ) {
+	errorOutput = output;
 }
 
 
-void DLog::SetDebugOutputDevice( DIOSys::IOutputDevice * output ) {
+//
+void DLog::SetWarningOutputDevice( IOutputDevice* output ) {
+	warningOutput = output;
+}
+
+
+//
+void DLog::SetInfoOutputDevice( IOutputDevice* output ) {
+	infoOutput = output;
+}
+
+
+//
+void DLog::SetDebugOutputDevice( IOutputDevice* output ) {
 #if defined( DEBUG ) || defined( _DEBUG )
-	__debugOutput = output;
+	debugOutput = output;
 #endif
 }
+
 
 /*
 	PRIVATE FUNCTIONS IMPLEMENTATION
 */
-static void __FormatToOutput( DIOSys::IOutputDevice *output, const char *str, va_list args ) {
+static void FormatToOutput( IOutputDevice* output, const char* str, va_list args ) {
 	assert( output );
 
-	char buffer[ __MAX_BUFFER_LEN ];
+	char buffer[ MAX_BUFFER_LEN ];
 	int bytesWriten = vsnprintf(
 		&buffer[ 0 ],
-		__MAX_BUFFER_LEN,
+		MAX_BUFFER_LEN,
 		str,
 		args );
 
-	output->Write( &buffer, static_cast< std::size_t > ( bytesWriten ) );
+	output->Write( &buffer, bytesWriten );
 }
+
+
 //
-static void __PutStrToOutput( DIOSys::IOutputDevice *output, const char *str ) {
+static void PutStrToOutput( IOutputDevice* output, const char* str ) {
 	assert( output );
 	if( str ) {
 		const std::size_t len = strlen( str );
 		output->Write( str, len );
 	}
-
 }
