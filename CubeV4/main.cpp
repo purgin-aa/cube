@@ -161,7 +161,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 
 	while( running ) {
 		u32 currentTime = SDL_GetTicks();
-		f32 deltaTime = static_cast< f32 >( currentTime - lastTime ) / 1000.f;
+		f32 deltaTime = ( f32 )( currentTime - lastTime ) / 1000.f;
 		lastTime = currentTime;
 
 		// fast keyboard controll
@@ -194,8 +194,8 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int ) {
 				}
 				case SDL_MOUSEMOTION: {
 					//
-					const f32 dlongitude = static_cast< f32 >( event.motion.xrel ) * 2.0f / static_cast< f32 >( windowWidth );
-					const f32 dlatitude = -static_cast< f32 >( event.motion.yrel ) * 2.0f / static_cast< f32 >( windowHeight );
+					const f32 dlongitude = ( f32 )( event.motion.xrel ) * 2.0f / ( f32 )( windowWidth ); // todo
+					const f32 dlatitude = -( f32 )( event.motion.yrel ) * 2.0f / ( f32 )( windowHeight ); // todo
 					
 					//
 					camera.AddLongitude( dlongitude );

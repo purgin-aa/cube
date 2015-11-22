@@ -70,7 +70,7 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 	DWindowContextConfig supportedConfig = config;
 
 	// check display mode
-	if( !DCheckDisplayMode(
+	if( !DWeakCheckDisplayMode(
 		dxgiAdapter.Get(),
 		&config.displayMode,
 		&supportedConfig.displayMode,
@@ -83,6 +83,18 @@ DWindowRenderContextPtr DWindowRenderContext::Create( DRenderResourceManagerPtr 
 		return nullptr;
 	}
 	
+	// resize window
+	if( ( config.displayMode.width != supportedConfig.displayMode.width )
+		|| ( config.displayMode.height != supportedConfig.displayMode.height ) ) {
+		SetWindowPos(
+			supportedConfig.currentWindow,
+			HWND_TOP,
+			0, 0,
+			supportedConfig.displayMode.width,
+			supportedConfig.displayMode.height,
+			SWP_NOMOVE );
+	}
+
 	DIDXGIFactory2Ptr factory;
 	hr = dxgiAdapter->GetParent( __uuidof( IDXGIFactory2 ), ( void** )&factory );
 	LM_CHECKRESULT( hr, returnCode, nullptr );
